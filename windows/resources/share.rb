@@ -21,6 +21,9 @@
 # limitations under the License.
 #
 
+chef_version_for_provides '< 14.7' if respond_to?(:chef_version_for_provides)
+resource_name :windows_share
+
 require 'chef/json_compat'
 
 # Specifies a name for the SMB share. The name may be composed of any valid file name characters, but must be less than 80 characters long. The names pipe and mailslot are reserved for use by the computer.
@@ -207,6 +210,10 @@ action_class do
 
     Chef::Log.debug("Running '#{share_cmd}' to create the share")
     powershell_out!(share_cmd)
+
+    # New-SmbShare adds the "Everyone" user with read access no matter what so we need to remove it
+    # before we add our permissions
+    revoke_user_permissions(['Everyone'])
   end
 
   # determine what users in the current state don't exist in the desired state
@@ -262,8 +269,10 @@ action_class do
     false
   end
 
+  # revoke user permissions from a share
+  # @param [Array] users
   def revoke_user_permissions(users)
-    revoke_command = "Revoke-SmbShareAccess -Name '#{new_resource.share_name}' -AccountName \"#{users.join(',')}\" -Force"
+    revoke_command = "Revoke-SmbShareAccess -Name '#{new_resource.share_name}' -AccountName \"#{users.join('","')}\" -Force"
     Chef::Log.debug("Running '#{revoke_command}' to revoke share permissions")
     powershell_out!(revoke_command)
   end

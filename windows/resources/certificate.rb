@@ -19,12 +19,18 @@
 # limitations under the License.
 #
 
+require 'chef/util/path_helper'
+
+chef_version_for_provides '< 14.7' if respond_to?(:chef_version_for_provides)
+resource_name :windows_certificate
+
 property :source, String, name_property: true
 property :pfx_password, String
 property :private_key_acl, Array
 property :store_name, String, default: 'MY', equal_to: ['TRUSTEDPUBLISHER', 'TrustedPublisher', 'CLIENTAUTHISSUER', 'REMOTE DESKTOP', 'ROOT', 'TRUSTEDDEVICES', 'WEBHOSTING', 'CA', 'AUTHROOT', 'TRUSTEDPEOPLE', 'MY', 'SMARTCARDROOT', 'TRUST', 'DISALLOWED']
 property :user_store, [true, false], default: false
 property :cert_path, String
+property :sensitive, [ TrueClass, FalseClass ], default: lazy { |r| r.pfx_password ? true : false }
 
 action :create do
   load_gem
@@ -52,6 +58,7 @@ action :acl_add do
     convert_boolean_return true
     code code_script
     only_if guard_script
+    sensitive if new_resource.sensitive
   end
 end
 
@@ -163,7 +170,7 @@ action_class do
 
   def cert_script(persist)
     cert_script = '$cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2'
-    file = win_friendly_path(new_resource.source)
+    file = Chef::Util::PathHelper.cleanpath(new_resource.source)
     cert_script << " \"#{file}\""
     if ::File.extname(file.downcase) == '.pfx'
       cert_script << ", \"#{new_resource.pfx_password}\""
