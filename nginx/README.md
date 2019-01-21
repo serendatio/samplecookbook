@@ -12,7 +12,6 @@ The following cookbooks are direct dependencies because they're used for common 
 
 - `build-essential` for source installations
 - `ohai` for setting up the ohai plugin
-- `compat_resource` for setting up the nginx.org repository on Chef 12.1 - 12.13
 - `yum-epel` for setting up the EPEL repository on RHEL platforms
 - `zypper` for setting up the nginx.org repository on Suse platforms
 
@@ -30,7 +29,7 @@ Other Debian and RHEL family distributions are assumed to work.
 
 ### Chef
 
-- Chef 12.1+
+- Chef 13.3+
 
 ## Attributes
 
@@ -53,6 +52,7 @@ Generally used attributes. Some have platform specific values. See `attributes/d
 - `node['nginx']['log_dir']` - Location for nginx logs.
 - `node['nginx']['log_dir_perm']` - Permissions for nginx logs folder.
 - `node['nginx']['user']` - User that nginx will run as.
+- `node['nginx']['user_home']` - User home path, used during user creation.
 - `node['nginx']['group']` - Group for nginx.
 - `node['nginx']['port']` - Port for nginx to listen on.
 - `node['nginx']['binary']` - Path to the nginx binary.
@@ -162,6 +162,7 @@ The `ohai_plugin` recipe includes an Ohai plugin. It will be automatically insta
 - `node['nginx']['configure_arguments']` - options passed to `./configure` when nginx was built
 - `node['nginx']['prefix']` - installation prefix
 - `node['nginx']['conf_path']` - configuration file path
+- `node['nginx']['ohai_plugin_enabled']` - Toggles ohai_plugin recipe. Defaults to true.
 
 In the source recipe, it is used to determine whether control attributes for building nginx have changed.
 
@@ -229,7 +230,7 @@ These attributes are used in the `nginx::source` recipe. Some of them are dynami
 - `node['nginx']['source']['modules']` - Array of modules that should be compiled into nginx by including their recipes in `nginx::source`.
 - `node['nginx']['source']['default_configure_flags']` - The default flags passed to the configure script when building nginx.
 - `node['nginx']['configure_flags']` - Preserved for compatibility and dynamically generated from the `node['nginx']['source']['default_configure_flags']` in the `nginx::source` recipe.
-- `node['nginx']['source']['use_existing_user']` - set to `true` if you do not want `nginx::source` recipe to create system user with name `node['nginx']['user']`.
+- `node['nginx']['source']['use_existing_user']` - set to `true` if you do not want `nginx::source` recipe to create system user with name `node['nginx']['user']` and `node['nginx']['user_home']`.
 
 ### nginx::status
 
@@ -267,7 +268,22 @@ Enable or disable a Server Block in `#{node['nginx']['dir']}/sites-available` by
 
 ### Properties:
 
-- `name` - (optional) Name of the site to enable. By default it's assumed that the name of the nginx_site resource is the site name, but this allows overriding that.
+- `site_name` - (optional) Name of the site to enable. By default it's assumed that the name of the nginx_site resource is the site name, but this allows overriding that.
+- `template` - (optional) Path to the source for the `template` resource.
+- `variables` - (optional) Variables to be used with the `template` resource
+
+### nginx_stream
+
+Enable or disable a Stream Block in `#{node['nginx']['dir']}/streams-available` by calling nxenstream or nxdisstream (introduced by this cookbook) to manage the symbolic link in `#{node['nginx']['dir']}/streams-enabled`.
+
+### Actions
+
+- `enable` - Enable the nginx stream (default)
+- `disable` - Disable the nginx stream
+
+### Properties:
+
+- `stream_name` - (optional) Name of the stream to enable.
 - `template` - (optional) Path to the source for the `template` resource.
 - `variables` - (optional) Variables to be used with the `template` resource
 

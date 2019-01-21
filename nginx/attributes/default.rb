@@ -60,6 +60,8 @@ else # debian probably
   default['nginx']['user']       = 'www-data'
 end
 
+default['nginx']['user_home'] = '/var/www'
+
 default['nginx']['upstart']['runlevels']     = '2345'
 default['nginx']['upstart']['respawn_limit'] = nil
 default['nginx']['upstart']['foreground']    = true
@@ -120,8 +122,13 @@ default['nginx']['proxy_read_timeout']          = nil
 default['nginx']['client_body_buffer_size']     = nil
 default['nginx']['client_max_body_size']        = nil
 default['nginx']['large_client_header_buffers'] = nil
+default['nginx']['map_hash_max_size']           = nil
+default['nginx']['proxy_buffer_size']           = nil
+default['nginx']['proxy_buffers']               = nil
+default['nginx']['proxy_busy_buffers_size']     = nil
 default['nginx']['default']['modules']          = []
 
 default['nginx']['extra_configs'] = {}
+default['nginx']['ohai_plugin_enabled'] = true
 
 default['nginx']['load_modules'] = []
