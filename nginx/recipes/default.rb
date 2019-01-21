@@ -2,27 +2,29 @@
 # Cookbook:: nginx
 # Recipe:: default
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
-#
-# Copyright:: 2008-2017, Chef Software, Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+# Copyright:: 2019, The Authors, All Rights Reserved.
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
 
-include_recipe "nginx::#{node['nginx']['install_method']}"
+package 'git'
+package 'tree'
 
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
+package 'nginx' do
+  action :install
+end
+
+
+service 'nginx' do
+  action [ :enable, :start ]
+end
+
+
+cookbook_file "/var/www/html/index.html" do
+  source "index.html"
+  mode "0644"
+end
+
+
+template "/etc/nginx/nginx.conf" do   
+  source "nginx.conf.erb"
+  notifies :reload, "service[nginx]"
 end
