@@ -2,16 +2,7 @@
 
 This file is used to list changes made in each version of the nginx cookbook.
 
-## 7.0.2 (2017-11-22)
-
-- Fix a bug that led to nginx recompiling when it didn't need to
-
-## 7.0.1 (2017-11-14)
-
-- Move passenger test attributes into the cookbook
-- Resolve FC108 warning
-
-## 7.0.0 (2017-09-18)
+## UNRELEASED
 
 ### Breaking Changes
 
