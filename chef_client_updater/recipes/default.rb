@@ -37,3 +37,15 @@ bash 'update_chef' do
   curl -L https://www.opscode.com/chef/install.sh | sudo bash
   EOH
 end
+
+service "chef_stop" do
+  service_name "chef-client"
+  action :stop
+end
+
+# Do something
+
+service "chef_start" do
+  service_name "chef-client"
+  action :start
+end
