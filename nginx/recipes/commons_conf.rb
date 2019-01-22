@@ -1,6 +1,6 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Recipe:: common/conf
 #
 # Author:: AJ Christensen <aj@junglist.gen.nz>
 #
@@ -19,10 +19,19 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
+template 'nginx.conf' do
+  path   "#{node['nginx']['dir']}/nginx.conf"
+  source node['nginx']['conf_template']
+  cookbook node['nginx']['conf_cookbook']
+  notifies :reload, 'service[nginx]', :delayed
+  variables(lazy { { pid_file: pidfile_location } })
+end
 
-include_recipe "nginx::#{node['nginx']['install_method']}"
+template "#{node['nginx']['dir']}/sites-available/default" do
+  source 'default-site.erb'
+  notifies :reload, 'service[nginx]', :delayed
+end
 
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
+nginx_site 'default' do
+  action node['nginx']['default_site_enabled'] ? :enable : :disable
 end

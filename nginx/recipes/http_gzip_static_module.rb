@@ -1,10 +1,10 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Recipe:: http_gzip_static_module
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Author:: Jamie Winsor (<jamie@vialstudios.com>)
 #
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2012-2017, Riot Games
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,9 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
-
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
+template "#{node['nginx']['dir']}/conf.d/http_gzip_static.conf" do
+  source 'modules/http_gzip_static.conf.erb'
 end
+
+node.run_state['nginx_configure_flags'] =
+  node.run_state['nginx_configure_flags'] | ['--with-http_gzip_static_module']

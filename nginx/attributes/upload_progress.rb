@@ -1,10 +1,10 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Attributes:: upload_progress
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Author:: Jamie Winsor (<jamie@vialstudios.com>)
 #
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2012-2017, Riot Games
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,8 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
-
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
-end
+default['nginx']['upload_progress']['url']               = 'https://github.com/masterzen/nginx-upload-progress-module/tarball/v0.9.0'
+default['nginx']['upload_progress']['checksum']          = '3fb903dab595cf6656fa0fc5743a48daffbba2f6b5c554836be630800eaad4e2'
+default['nginx']['upload_progress']['javascript_output'] = true
+default['nginx']['upload_progress']['zone_name']         = 'proxied'
+default['nginx']['upload_progress']['zone_size']         = '1m'

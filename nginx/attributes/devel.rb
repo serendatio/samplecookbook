@@ -1,10 +1,10 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Attributes:: devel
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Author:: Arthur Freyman (<afreyman@riotgames.com>)
 #
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2013-2017, Riot Games
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,6 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
-
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
-end
+default['nginx']['devel']['version']  = '0.3.0'
+default['nginx']['devel']['url']      = "https://github.com/simpl/ngx_devel_kit/archive/v#{node['nginx']['devel']['version']}.tar.gz"
+default['nginx']['devel']['checksum'] = '88e05a99a8a7419066f5ae75966fb1efc409bad4522d14986da074554ae61619'

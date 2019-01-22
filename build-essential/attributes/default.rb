@@ -1,8 +1,6 @@
 #
-# Cookbook:: nginx
-# Recipe:: default
-#
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Cookbook:: build-essential
+# Attributes:: default
 #
 # Copyright:: 2008-2017, Chef Software, Inc.
 #
@@ -19,10 +17,5 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
-
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
-end
+default['build-essential']['compile_time'] = false
+default['build-essential']['msys2']['path'] = "#{ENV['SYSTEMDRIVE']}\\msys2"

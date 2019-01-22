@@ -1,6 +1,6 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Recipe:: commons
 #
 # Author:: AJ Christensen <aj@junglist.gen.nz>
 #
@@ -19,10 +19,6 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
-
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
-end
+include_recipe 'nginx::commons_dir'
+include_recipe 'nginx::commons_script'
+include_recipe 'nginx::commons_conf'

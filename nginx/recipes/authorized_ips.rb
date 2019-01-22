@@ -1,10 +1,10 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Recipe:: authorized_ips
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Author:: Jamie Winsor (<jamie@vialstudios.com>)
 #
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2012-2017, Riot Games
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
+node.default['nginx']['remote_ip_var']  = 'remote_addr'
+node.default['nginx']['authorized_ips'] = ['127.0.0.1/32']
 
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
+template 'authorized_ip' do
+  path   "#{node['nginx']['dir']}/authorized_ip"
+  source 'modules/authorized_ip.erb'
+  notifies :reload, 'service[nginx]', :delayed
 end

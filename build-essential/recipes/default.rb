@@ -1,10 +1,8 @@
 #
-# Cookbook:: nginx
+# Cookbook:: build-essential
 # Recipe:: default
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
-#
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2008-2018, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +17,8 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
-
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
+# Call the build-essential custom resource
+# This can also be called directly in your cookbooks anywhere you want
+build_essential 'install_packages' do
+  compile_time node['build-essential']['compile_time']
 end

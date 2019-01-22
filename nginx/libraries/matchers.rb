@@ -1,10 +1,10 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Library:: matchers
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Author:: Tim Smith (<tsmith@chef.io>)
 #
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2016-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,17 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
+if defined?(ChefSpec)
+  #############
+  # nginx_site
+  #############
+  ChefSpec.define_matcher :nginx_site
 
-include_recipe "nginx::#{node['nginx']['install_method']}"
+  def enable_nginx_site(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:nginx_site, :enable, resource_name)
+  end
 
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
+  def disable_nginx_site(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:nginx_site, :disable, resource_name)
+  end
 end

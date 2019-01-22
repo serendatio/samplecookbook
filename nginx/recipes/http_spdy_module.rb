@@ -1,10 +1,10 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Recipe:: http_spdy_module
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Author:: Christoph Buente (<christoph@meinekleinefarm.org>)
 #
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2013-2017, MeinekleineFarm.org
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,5 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
-
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
-end
+node.run_state['nginx_configure_flags'] =
+  node.run_state['nginx_configure_flags'] | ['--with-http_spdy_module']

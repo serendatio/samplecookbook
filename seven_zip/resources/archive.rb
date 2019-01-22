@@ -1,10 +1,9 @@
 #
-# Cookbook:: nginx
-# Recipe:: default
+# Author:: Shawn Neal (<sneal@sneal.net>)
+# Cookbook:: seven_zip
+# Resource:: archive
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
-#
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2013-2017, Daptiv Solutions LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +18,12 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
+default_action :extract
 
-include_recipe "nginx::#{node['nginx']['install_method']}"
+actions :extract
 
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
-end
+attribute :path, kind_of: String, name_attribute: true
+attribute :source, kind_of: String
+attribute :overwrite, kind_of: [TrueClass, FalseClass], default: false
+attribute :checksum, kind_of: String
+attribute :timeout, kind_of: Integer

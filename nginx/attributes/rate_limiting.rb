@@ -1,10 +1,8 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Attribute:: rate_limiting
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
-#
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2013-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +17,7 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
-
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
-end
+default['nginx']['enable_rate_limiting']    = false
+default['nginx']['rate_limiting_zone_name'] = 'default'
+default['nginx']['rate_limiting_backoff']   = '10m'
+default['nginx']['rate_limit']              = '1r/s'

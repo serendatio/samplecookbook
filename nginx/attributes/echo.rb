@@ -1,10 +1,10 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Attributes:: echo
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Author:: Danial Pearce (<github@tigris.id.au>)
 #
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2013-2017, Danial Pearce
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,6 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
-
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
-end
+default['nginx']['echo']['version']        = '0.61'
+default['nginx']['echo']['url']            = "https://github.com/openresty/echo-nginx-module/archive/v#{node['nginx']['echo']['version']}.tar.gz"
+default['nginx']['echo']['checksum']       = '2e6a03032555f5da1bdff2ae96c96486f447da3da37c117e0f964ae0753d22aa'

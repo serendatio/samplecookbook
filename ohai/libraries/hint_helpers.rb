@@ -1,10 +1,10 @@
 #
-# Cookbook:: nginx
-# Recipe:: default
+# Cookbook:: ohai
+# Library:: hint_helpers
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Author:: Tim Smith (<tsmith@chef.io>)
 #
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,17 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
+module OhaiCookbook
+  module HintHelpers
+    def ohai_hint_file_path(filename)
+      path = ::File.join(::Ohai::Config.ohai.hints_path.first, filename)
+      path << '.json' unless path.end_with?('.json')
+      path
+    end
 
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
+    def format_content(content)
+      return '' if content.nil? || content.empty?
+      JSON.pretty_generate(content)
+    end
+  end
 end

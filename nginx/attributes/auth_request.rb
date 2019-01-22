@@ -1,10 +1,10 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Attributes:: auth_request
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Author:: David Radcliffe (<radcliffe.david@gmail.com>)
 #
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2013-2017, David Radcliffe
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,5 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
-
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
-end
+default['nginx']['auth_request']['url']      = 'http://mdounin.ru/hg/ngx_http_auth_request_module/archive/662785733552.tar.gz'
+default['nginx']['auth_request']['checksum'] = '2057bdefd2137a5000d9dbdbfca049d1ba7832ad2b9f8855a88ea5dfa70bd8c1'

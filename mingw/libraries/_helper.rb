@@ -1,10 +1,8 @@
 #
-# Cookbook:: nginx
-# Recipe:: default
+# Cookbook:: mingw
+# Library:: _helper
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
-#
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +17,22 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
+module Mingw
+  module Helper
+    def win_friendly_path(path)
+      path.gsub(::File::SEPARATOR, ::File::ALT_SEPARATOR || '\\') if path
+    end
 
-include_recipe "nginx::#{node['nginx']['install_method']}"
+    def archive_name(source)
+      url = ::URI.parse(source)
+      ::File.basename(::URI.unescape(url.path))
+    end
 
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
+    def tar_name(source)
+      aname = archive_name(source)
+      ::File.basename(aname, ::File.extname(aname))
+    end
+  end
 end
+
+Chef::Resource.send(:include, Mingw::Helper)

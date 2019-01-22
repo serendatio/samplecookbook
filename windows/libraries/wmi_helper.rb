@@ -1,10 +1,9 @@
 #
-# Cookbook:: nginx
-# Recipe:: default
+# Author:: Adam Edwards (<adamed@chef.io>)
+# Cookbook:: windows
+# Library:: wmi_helper
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
-#
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2014-2018, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +18,17 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
+if RUBY_PLATFORM =~ /mswin|mingw32|windows/
+  require 'win32ole'
 
-include_recipe "nginx::#{node['nginx']['install_method']}"
+  def execute_wmi_query(wmi_query)
+    wmi = ::WIN32OLE.connect('winmgmts://')
+    result = wmi.ExecQuery(wmi_query)
+    return nil unless result.each.count > 0
+    result
+  end
 
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
+  def wmi_object_property(wmi_object, wmi_property)
+    wmi_object.send(wmi_property)
+  end
 end

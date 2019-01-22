@@ -1,10 +1,11 @@
 #
 # Cookbook:: nginx
-# Recipe:: default
+# Recipe:: ohai_plugin
 #
-# Author:: AJ Christensen <aj@junglist.gen.nz>
+# Author:: Jamie Winsor (<jamie@vialstudios.com>)
 #
-# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2012-2017, Riot Games
+# Copyright:: 2016-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +20,14 @@
 # limitations under the License.
 #
 
-nginx_cleanup_runit 'cleanup' if node['nginx']['cleanup_runit']
+# for notification post install / change
+ohai 'reload_nginx' do
+  plugin 'nginx'
+  action :nothing
+end
 
-include_recipe "nginx::#{node['nginx']['install_method']}"
-
-node['nginx']['default']['modules'].each do |ngx_module|
-  include_recipe "nginx::#{ngx_module}"
+ohai_plugin 'nginx' do
+  source_file 'plugins/ohai-nginx.rb.erb'
+  variables binary: node['nginx']['binary']
+  resource :template
 end
