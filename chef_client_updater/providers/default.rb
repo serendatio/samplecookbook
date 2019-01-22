@@ -209,7 +209,7 @@ def run_post_install_action
       Process.kill('KILL', Process.ppid)
     end
     Chef::Log.warn 'New chef-client installed and exit is allowed. Forcing chef exit!'
-    #exit(213)
+    exit(213)
   else
     raise "Unexpected post_install_action behavior: #{new_resource.post_install_action}"
   end
