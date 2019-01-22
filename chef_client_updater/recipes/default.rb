@@ -3,7 +3,7 @@
 # Cookbook:: chef_client_updater
 # Recipe:: default
 #
-# Copyright:: 2016-2017, Chef Software, Inc.
+# Copyright:: 2016-2018, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,4 +24,7 @@ chef_client_updater 'update chef-client' do
   post_install_action node['chef_client_updater']['post_install_action']
   download_url_override node['chef_client_updater']['download_url_override'] if node['chef_client_updater']['download_url_override']
   checksum node['chef_client_updater']['checksum'] if node['chef_client_updater']['checksum']
+  upgrade_delay node['chef_client_updater']['upgrade_delay'] unless node['chef_client_updater']['upgrade_delay'].nil?
+  product_name node['chef_client_updater']['product_name'] if node['chef_client_updater']['product_name']
+  handle_zip_download_url node['chef_client_updater']['handle_zip_download_url'] if node['chef_client_updater']['handle_zip_download_url']
 end

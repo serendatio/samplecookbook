@@ -2,7 +2,7 @@
 # Cookbook::  chef_client_updater
 # Attributes:: default
 #
-# Copyright:: 2016-2017, Chef Software, Inc.
+# Copyright:: 2016-2018, Chef Software Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -20,16 +20,29 @@
 default['chef_client_updater']['channel'] = 'stable'
 
 # prevent a newer client "updating" to an older client
-default['chef_client_updater']['prevent_downgrade'] = true
+default['chef_client_updater']['prevent_downgrade'] = false
 
 # the version to install (ex: '12.12.13') or 'latest'
 default['chef_client_updater']['version'] = 'latest'
 
 # kill the client post install or exec the client post install for non-service based installs
-default['chef_client_updater']['post_install_action'] = 'exec'
+default['chef_client_updater']['post_install_action'] = Chef::Config[:no_fork] ? 'exec' : 'kill'
 
 # the download URL (for use in an air-gapped environment)
 default['chef_client_updater']['download_url_override'] = nil
 
 # the checksum of the package from "download_url_override"
 default['chef_client_updater']['checksum'] = nil
+
+# Root installation path for chef-client for when a custom path is used.
+# Defaults to 'C:/opscode/chef' on Windows and '/opt/chef' for everything else.
+default['chef_client_updater']['chef_install_path'] = nil
+
+# delay for triggering Chef client upgrade in seconds
+default['chef_client_updater']['upgrade_delay'] = nil
+
+# name of the product to upgrade (chef or chefdk)
+default['chef_client_updater']['product_name'] = nil
+
+# download URL for Sysinternals handle.zip (Windows only)
+default['chef_client_updater']['handle_zip_download_url'] = nil
