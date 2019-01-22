@@ -29,6 +29,4 @@
 #   handle_zip_download_url node['chef_client_updater']['handle_zip_download_url'] if node['chef_client_updater']['handle_zip_download_url']
 # end
 
-chef_client_updater 'Install latest Chef 13.x' do
-  version '13'
-end
+chef_client_updater 'Install latest'
