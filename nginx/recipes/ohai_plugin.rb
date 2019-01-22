@@ -1,11 +1,10 @@
 #
-# Cookbook:: nginx
+# Cookbook Name:: nginx
 # Recipe:: ohai_plugin
 #
 # Author:: Jamie Winsor (<jamie@vialstudios.com>)
 #
-# Copyright:: 2012-2017, Riot Games
-# Copyright:: 2016-2017, Chef Software, Inc.
+# Copyright 2012-2013, Riot Games
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,14 +19,17 @@
 # limitations under the License.
 #
 
-# for notification post install / change
 ohai 'reload_nginx' do
   plugin 'nginx'
   action :nothing
 end
 
-ohai_plugin 'nginx' do
-  source_file 'plugins/ohai-nginx.rb.erb'
-  variables binary: node['nginx']['binary']
-  resource :template
+template "#{node['ohai']['plugin_path']}/nginx.rb" do
+  source 'plugins/nginx.rb.erb'
+  owner  'root'
+  group  node['root_group']
+  mode   '0755'
+  notifies :reload, 'ohai[reload_nginx]', :immediately
 end
+
+include_recipe 'ohai::default'

@@ -1,10 +1,10 @@
 #
-# Cookbook:: nginx
+# Cookbook Name:: nginx
 # Recipe:: syslog_module
 #
 # Author:: Bob Ziuchkovski (<bob@bz-technology.com>)
 #
-# Copyright:: 2014-2017, UserTesting
+# Copyright 2014, UserTesting
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,24 +23,24 @@ nginx_src = "#{Chef::Config['file_cache_path']}/nginx-#{node['nginx']['source'][
 nginx_syslog_src = "#{Chef::Config['file_cache_path']}/nginx_syslog_module"
 
 major, minor, patch = node['nginx']['source']['version'].split('.').map { |s| Integer(s) }
-raise 'Unsupported nginx version' if major != 1
+fail 'Unsupported nginx version' if major != 1
 case minor
 when 2
-  syslog_patch = case patch
-                 when 0..6
-                   'syslog_1.2.0.patch'
-                 else
-                   'syslog_1.2.7.patch'
-                 end
+  case patch
+  when 0..6
+    syslog_patch = 'syslog_1.2.0.patch'
+  else
+    syslog_patch = 'syslog_1.2.7.patch'
+  end
 when 3
-  syslog_patch = case patch
-                 when 0..9
-                   'syslog_1.2.0.patch'
-                 when 10..13
-                   'syslog_1.3.11.patch'
-                 else
-                   'syslog_1.3.14.patch'
-                 end
+  case patch
+  when 0..9
+    syslog_patch = 'syslog_1.2.0.patch'
+  when 10..13
+    syslog_patch = 'syslog_1.3.11.patch'
+  else
+    syslog_patch = 'syslog_1.3.14.patch'
+  end
 when 4
   syslog_patch = 'syslog_1.4.0.patch'
 when 5..6
@@ -48,19 +48,21 @@ when 5..6
 when 7
   syslog_patch = 'syslog_1.7.0.patch'
 else
-  raise 'Unsupported nginx version'
+  fail 'Unsupported nginx version'
 end
 
 git nginx_syslog_src do
   repository node['nginx']['syslog']['git_repo']
   revision node['nginx']['syslog']['git_revision']
   action :sync
+  user 'root'
+  group 'root'
 end
 
 execute 'apply_nginx_syslog_patch' do
   cwd  nginx_src
   command "patch -p1 < #{nginx_syslog_src}/#{syslog_patch}"
-  not_if "patch -p1 --dry-run --reverse --silent < #{nginx_syslog_src}/#{syslog_patch}", cwd: nginx_src
+  not_if "patch -p1 --dry-run --reverse --silent < #{nginx_syslog_src}/#{syslog_patch}", :cwd => nginx_src
 end
 
 node.run_state['nginx_configure_flags'] =

@@ -14,7 +14,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=<%= node['nginx']['binary'] %>
 NAME=nginx
 DESC=nginx
-PID=<%= @pid_file %>
+PID=<%= node['nginx']['pid'] %>
 
 # Include nginx defaults if available
 if [ -f /etc/default/nginx ]; then
