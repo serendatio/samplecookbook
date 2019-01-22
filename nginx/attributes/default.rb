@@ -1,11 +1,11 @@
 #
-# Cookbook Name:: nginx
+# Cookbook:: nginx
 # Attributes:: default
 #
 # Author:: Adam Jacob (<adam@chef.io>)
 # Author:: Joshua Timberman (<joshua@chef.io>)
 #
-# Copyright 2009-2013, Chef Software, Inc.
+# Copyright:: 2009-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,9 +21,8 @@
 #
 
 # In order to update the version, the checksum attribute must be changed too.
-# This attribute is in the source.rb file, though we recommend overriding
-# attributes by modifying a role, or the node itself.
-default['nginx']['version']      = '1.6.2'
+# This attribute is defined in the source.rb attribute file
+default['nginx']['version']      = '1.12.1'
 default['nginx']['package_name'] = 'nginx'
 default['nginx']['port']         = '80'
 default['nginx']['dir']          = '/etc/nginx'
@@ -34,22 +33,19 @@ default['nginx']['binary']       = '/usr/sbin/nginx'
 default['nginx']['default_root'] = '/var/www/nginx-default'
 default['nginx']['ulimit']       = '1024'
 
-default['nginx']['pid'] = '/var/run/nginx.pid'
+# cleanup runit install of previous cookbooks
+default['nginx']['cleanup_runit'] = true
+
+# use the upstream nginx repo vs. distro packages
+# this enables the use of modern nginx releases
+# set this to nil to use the distro packages
+# this is ignored if install_method is set to source
+default['nginx']['repo_source']    = 'nginx'
+default['nginx']['install_method'] = 'package'
 
 case node['platform_family']
-when 'debian'
-  default['nginx']['user']       = 'www-data'
-  default['nginx']['init_style'] = 'runit'
-  if platform == 'ubuntu' && platform_version == '14.04'
-    default['nginx']['pid'] = '/run/nginx.pid'
-  end
-when 'rhel', 'fedora'
-  default['nginx']['user']        = 'nginx'
-  default['nginx']['init_style']  = 'init'
-  default['nginx']['repo_source'] = 'epel'
-when 'gentoo'
-  default['nginx']['user']       = 'nginx'
-  default['nginx']['init_style'] = 'init'
+when 'rhel', 'fedora', 'amazon'
+  default['nginx']['user'] = 'nginx'
 when 'freebsd'
   default['nginx']['package_name'] = 'www/nginx'
   default['nginx']['user']         = 'www'
@@ -59,12 +55,12 @@ when 'freebsd'
   default['nginx']['default_root'] = '/usr/local/www/nginx-dist'
 when 'suse'
   default['nginx']['user']       = 'wwwrun'
-  default['nginx']['init_style'] = 'init'
   default['nginx']['group']      = 'www'
-else
+else # debian probably
   default['nginx']['user']       = 'www-data'
-  default['nginx']['init_style'] = 'init'
 end
+
+default['nginx']['user_home'] = '/var/www'
 
 default['nginx']['upstart']['runlevels']     = '2345'
 default['nginx']['upstart']['respawn_limit'] = nil
@@ -87,6 +83,7 @@ default['nginx']['gzip_types'] = %w(
   application/xml
   application/rss+xml
   application/atom+xml
+  image/svg+xml
   text/javascript
   application/javascript
   application/json
@@ -117,7 +114,6 @@ default['nginx']['access_log_options']     = nil
 default['nginx']['error_log_options']      = nil
 default['nginx']['disable_access_log']     = false
 default['nginx']['log_formats']            = {}
-default['nginx']['install_method']         = 'package'
 default['nginx']['default_site_enabled']   = true
 default['nginx']['types_hash_max_size']    = 2_048
 default['nginx']['types_hash_bucket_size'] = 64
@@ -126,6 +122,13 @@ default['nginx']['proxy_read_timeout']          = nil
 default['nginx']['client_body_buffer_size']     = nil
 default['nginx']['client_max_body_size']        = nil
 default['nginx']['large_client_header_buffers'] = nil
+default['nginx']['map_hash_max_size']           = nil
+default['nginx']['proxy_buffer_size']           = nil
+default['nginx']['proxy_buffers']               = nil
+default['nginx']['proxy_busy_buffers_size']     = nil
 default['nginx']['default']['modules']          = []
 
 default['nginx']['extra_configs'] = {}
+default['nginx']['ohai_plugin_enabled'] = true
+
+default['nginx']['load_modules'] = []
