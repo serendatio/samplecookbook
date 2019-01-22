@@ -37,12 +37,3 @@ bash 'update_chef' do
   curl -L https://www.opscode.com/chef/install.sh | sudo bash
   EOH
 end
-
-
-bash 'kill_chef' do
-  user 'root'
-  cwd '/tmp'
-  code <<-EOH
-   killall -9 chef-client
-  EOH
-end
