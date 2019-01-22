@@ -37,12 +37,3 @@ bash 'update_chef' do
   curl -L https://www.opscode.com/chef/install.sh | sudo bash
   EOH
 end
-
-
-bash 'restart_chef' do
-  user 'root'
-  cwd '/tmp'
-  code <<-EOH
-  sudo chef-client restart
-  EOH
-end
