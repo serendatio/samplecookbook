@@ -43,6 +43,6 @@ bash 'restart_chef' do
   user 'root'
   cwd '/tmp'
   code <<-EOH
-  sudo service chef-client restart
+  sudo chef-client restart
   EOH
 end
