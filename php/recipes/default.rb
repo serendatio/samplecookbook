@@ -33,36 +33,17 @@
 # include_recipe 'php::ini'
 
 
-# ## Set package names to install PHP 7.0 on Amazon Linux
-# node.default['php']['packages'] = %w[
-#   php70 php70-common php70-curl php70-devel php70-mbstring
-#   php70-mcrypt php70-mysqlnd php70-opcache php70-pdo php7-pear
-#   php70-pecl-apcu php70-readline
-# ]
-
-# # Set PECL and PEAR binary for Amazon Linux PHP 7.0
-# node.default['php']['pear'] = 'pear7'
-# node.default['php']['pecl'] = 'pecl7'
-
-# # Run default recipe
-# include_recipe 'php'
-
-script 'add remi repo for yum' do
+# Install remi repo for yum
+script 'install php72' do
     interpreter 'bash'
     code <<-EOH
-        cd /tmp
-        wget http://rpms.remirepo.net/enterprise/remi-release-6.rpm
-        sudo rpm -Uvh remi-release*rpm
+        sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+		sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+		sudo yum install yum-utils
+		sudo subscription-manager repos --enable=rhel-7-server-optional-rpms
+		sudo yum-config-manager --enable remi-php72
+		sudo yum update
+		sudo yum search php72 | more
+		sudo yum install php72 php72-php-fpm php72-php-gd php72-php-json php72-php-mbstring php72-php-mysqlnd php72-php-xml php72-php-xmlrpc php72-php-opcache
     EOH
-end
-
-# Install php yaml
-script 'install php-yaml' do
-    interpreter 'bash'
-    code <<-EOH
-        sudo yum -y --enablerepo=remi-php72 install php72-php-pecl-yaml
-        sudo mv /opt/remi/php72/root/usr/lib64/php/modules/yaml.so /usr/lib64/php/7.2/modules/yaml.so
-    EOH
-
-    not_if { ::File.exists?("/usr/lib64/php/7.2/modules/yaml.so") }
 end
