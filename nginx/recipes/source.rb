@@ -29,23 +29,22 @@ node.normal['nginx']['daemon_disable'] = true
 user node['nginx']['user'] do
   system true
   shell  '/bin/false'
-  home   node['nginx']['user_home']
-  manage_home true
+  home   '/var/www'
   not_if { node['nginx']['source']['use_existing_user'] }
 end
 
-include_recipe 'nginx::ohai_plugin' if node['nginx']['ohai_plugin_enabled']
+include_recipe 'nginx::ohai_plugin'
 include_recipe 'nginx::commons_dir'
 include_recipe 'nginx::commons_script'
-build_essential 'install compilation tools'
+include_recipe 'build-essential::default'
 
 src_filepath = "#{Chef::Config['file_cache_path']}/nginx-#{node['nginx']['source']['version']}.tar.gz"
 
 # install prereqs
 package value_for_platform_family(
-  %w(rhel fedora amazon) => %w(pcre-devel openssl-devel tar zlib-devel),
+  %w(rhel fedora amazon) => %w(pcre-devel openssl-devel tar),
   %w(suse) => %w(pcre-devel libopenssl-devel tar),
-  %w(debian) => %w(libpcre3 libpcre3-dev libssl-dev tar zlib1g-dev)
+  %w(debian) => %w(libpcre3 libpcre3-dev libssl-dev tar)
 )
 
 remote_file 'nginx source' do
@@ -103,7 +102,7 @@ bash 'compile_nginx_source' do
   end
 
   notifies :restart, 'service[nginx]'
-  notifies :reload,  'ohai[reload_nginx]', :immediately if node['nginx']['ohai_plugin_enabled']
+  notifies :reload,  'ohai[reload_nginx]', :immediately
 end
 
 case node['nginx']['init_style']
