@@ -32,6 +32,7 @@
 
 # include_recipe 'php::ini'
 
+include_recipe "php::#{node['php']['install_method']}"
 
 ## Set package names to install PHP 7.0 on Amazon Linux
 node.default['php']['packages'] = %w[
