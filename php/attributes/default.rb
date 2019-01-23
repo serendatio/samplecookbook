@@ -24,7 +24,7 @@ default['php']['bin'] = 'php'
 
 default['php']['pecl'] = 'pecl'
 
-default['php']['version'] = '5.6.30'
+default['php']['version'] = '7.3'
 
 default['php']['pear'] = '/usr/bin/pear'
 default['php']['pear_setup'] = true
