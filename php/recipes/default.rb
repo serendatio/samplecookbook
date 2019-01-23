@@ -37,6 +37,7 @@
 script 'install php72' do
     interpreter 'bash'
     code <<-EOH
+    	sudo yum update -y
         sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 		sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 		sudo yum -y install yum-utils
