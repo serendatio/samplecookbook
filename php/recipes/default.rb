@@ -19,15 +19,30 @@
 # limitations under the License.
 #
 
-include_recipe "php::#{node['php']['install_method']}"
+# include_recipe "php::#{node['php']['install_method']}"
 
-# update the main channels
-node['php']['pear_channels'].each do |channel|
-  php_pear_channel channel do
-    binary node['php']['pear']
-    action :update
-    only_if { node['php']['pear_setup'] }
-  end
-end
+# # update the main channels
+# node['php']['pear_channels'].each do |channel|
+#   php_pear_channel channel do
+#     binary node['php']['pear']
+#     action :update
+#     only_if { node['php']['pear_setup'] }
+#   end
+# end
 
-include_recipe 'php::ini'
+# include_recipe 'php::ini'
+
+
+## Set package names to install PHP 7.0 on Amazon Linux
+node.default['php']['packages'] = %w[
+  php70 php70-common php70-curl php70-devel php70-mbstring
+  php70-mcrypt php70-mysqlnd php70-opcache php70-pdo php7-pear
+  php70-pecl-apcu php70-readline
+]
+
+# Set PECL and PEAR binary for Amazon Linux PHP 7.0
+node.default['php']['pear'] = 'pear7'
+node.default['php']['pecl'] = 'pecl7'
+
+# Run default recipe
+include_recipe 'php'
