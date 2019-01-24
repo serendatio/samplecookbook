@@ -32,14 +32,30 @@
 
 # include_recipe 'php::ini'
 
+# Install remi repo for yum
+script 'update yum' do
+    interpreter 'bash'
+    code <<-EOH
+    	sudo yum update -y
+    EOH
+end
+
+
+# Install remi repo for yum
+script 'install libsystemd' do
+    interpreter 'bash'
+    code <<-EOH
+    	sudo yum install libsystemd -y
+    	sudo yum install libsystemd-devel -y
+    EOH
+end
+
 
 # Install remi repo for yum
 script 'install php72' do
     interpreter 'bash'
     code <<-EOH
-    	sudo yum update -y
-    	sudo yum install libsystemd-devel -y
-        sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    	sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 		sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 		sudo yum -y install yum-utils
 		sudo subscription-manager repos --enable=rhel-7-server-optional-rpms
