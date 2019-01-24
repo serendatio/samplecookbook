@@ -13,6 +13,17 @@ script 'update yum' do
 end
 
 
+script 'amazon extras' do
+	interpreter 'bash'
+	code <<-EOH
+		sudo amazon-linux-extras install nginx1.12 -y
+		sudo amazon-linux-extras install epel -y
+		sudo amazon-linux-extras install memcached1.5 -y
+		sudo amazon-linux-extras install php7.2 -y
+	EOH
+end
+
+
 package 'nginx' do
   action :install
 end
