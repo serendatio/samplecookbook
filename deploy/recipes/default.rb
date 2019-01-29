@@ -1,6 +1,6 @@
 include_recipe 'aws'
 
-aws_s3_file "/tmp" do
+aws_s3_file "/tmp/codebuild" do
   bucket "serend-codebuild-bucket"
   remote_path "serend-dev.zip"
   aws_access_key_id node[:custom_access_key]
