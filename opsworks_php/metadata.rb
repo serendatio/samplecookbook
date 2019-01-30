@@ -11,7 +11,7 @@ chef_version '~> 14.9.13' if respond_to?(:chef_version)
 
 #depends 'apt', '< 7.0'
 depends 'nginx'
-#depends 'logrotate'
+depends 'logrotate'
 #depends 'ruby-ng'
 #depends 's3_file'
 #depends 'sudo'
