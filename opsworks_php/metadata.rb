@@ -14,9 +14,9 @@ depends 'nginx'
 #depends 'logrotate'
 #depends 'ruby-ng'
 #depends 's3_file'
-depends 'sudo'
+#depends 'sudo'
 
-depends 'php'
+#depends 'php'
 #depends 'composer'
 
 supports 'amazon', '>= 2017.03'
