@@ -69,7 +69,7 @@ end
 #   keyserver 'keyserver.ubuntu.com'
 #   key 'E5267A6C'
 #   only_if { node['defaults']['webserver']['use_apache2_ppa'] }
-end
+# end
 
 # gem_package 'bundler' do
 #   action :install
