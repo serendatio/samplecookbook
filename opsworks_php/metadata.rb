@@ -19,6 +19,8 @@ depends 's3_file'
 #depends 'php'
 #depends 'composer'
 
+depends 'deploy_resource'
+
 supports 'amazon', '>= 2017.03'
 supports 'ubuntu', '>= 16.04'
 
