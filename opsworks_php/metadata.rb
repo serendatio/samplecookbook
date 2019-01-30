@@ -9,7 +9,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '1.10.1'
 chef_version '~> 12.0' if respond_to?(:chef_version)
 
-depends 'apt', '< 7.0'
+#depends 'apt', '< 7.0'
 depends 'nginx'
 depends 'logrotate'
 depends 'ruby-ng'
