@@ -42,14 +42,14 @@ if node['platform_family'] == 'debian'
   end
 end
 
-# PHP
-include_recipe 'php'
+# # PHP
+# include_recipe 'php'
 
-php_pear 'php_curl' do
-  action :upgrade
-end
+# php_pear 'php_curl' do
+#   action :upgrade
+# end
 
-include_recipe 'composer'
+# include_recipe 'composer'
 
 # Ruby and bundler
 # if node['platform_family'] == 'debian'
@@ -62,13 +62,13 @@ include_recipe 'composer'
 #   execute "/usr/sbin/alternatives --set ruby /usr/bin/ruby#{ruby_pkg_version.join('.')}"
 # end
 
-apt_repository 'apache2' do
-  uri 'http://ppa.launchpad.net/ondrej/apache2/ubuntu'
-  distribution node['lsb']['codename']
-  components %w[main]
-  keyserver 'keyserver.ubuntu.com'
-  key 'E5267A6C'
-  only_if { node['defaults']['webserver']['use_apache2_ppa'] }
+# apt_repository 'apache2' do
+#   uri 'http://ppa.launchpad.net/ondrej/apache2/ubuntu'
+#   distribution node['lsb']['codename']
+#   components %w[main]
+#   keyserver 'keyserver.ubuntu.com'
+#   key 'E5267A6C'
+#   only_if { node['defaults']['webserver']['use_apache2_ppa'] }
 end
 
 # gem_package 'bundler' do
