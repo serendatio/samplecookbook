@@ -11,13 +11,13 @@ chef_version '~> 12.0' if respond_to?(:chef_version)
 
 #depends 'apt', '< 7.0'
 depends 'nginx'
-depends 'logrotate'
+#depends 'logrotate'
 depends 'ruby-ng'
 depends 's3_file'
 depends 'sudo'
 
 depends 'php'
-depends 'composer'
+#depends 'composer'
 
 supports 'amazon', '>= 2017.03'
 supports 'ubuntu', '>= 16.04'
