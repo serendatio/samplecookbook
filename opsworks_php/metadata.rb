@@ -7,7 +7,7 @@ license 'MIT'
 description 'Set of chef recipes for OpsWorks based Ruby projects'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '1.10.1'
-chef_version '~> 14.10' if respond_to?(:chef_version)
+chef_version '~> 14.9.13' if respond_to?(:chef_version)
 
 #depends 'apt', '< 7.0'
 depends 'nginx'
