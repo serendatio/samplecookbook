@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+include_recipe 'deploy_resource'
+
 prepare_recipe
 
 include_recipe 'opsworks_php::configure'
