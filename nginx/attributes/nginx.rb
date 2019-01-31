@@ -67,4 +67,7 @@ default[:nginx][:server_names_hash_bucket_size] = 64
 default[:nginx][:proxy_read_timeout] = 60
 default[:nginx][:proxy_send_timeout] = 60
 
+# Custom deploy forlder for app
+default[:nginx][:deploy_dir] = "/mnt/nginx"
+
 include_attribute "nginx::customize"

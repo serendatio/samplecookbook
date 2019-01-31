@@ -70,7 +70,7 @@ end
 include_recipe "nginx::service"
 
 # Create default nginx folder for app deployment
-directory '/mnt/nginx' do
+directory "#{node['nginx']['deploy_dir']}" do
   owner 'root'
   group 'root'
   mode '0755'
