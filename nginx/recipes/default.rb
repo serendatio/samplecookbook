@@ -69,6 +69,15 @@ end
 
 include_recipe "nginx::service"
 
+# Create default nginx folder for app deployment
+directory '/mnt/nginx' do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  action :create
+end
+
+# Start nginx
 service "nginx" do
   action [ :enable, :start ]
 end
