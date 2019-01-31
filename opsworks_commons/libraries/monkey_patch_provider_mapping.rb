@@ -1,7 +1,6 @@
-# original file: https://github.com/chef/chef/blob/0d097217dda26ac5551d1ad24132d9e53a62e0fb/lib/chef/platform/provider_mapping.rb
 #
-# Author:: Adam Jacob (<adam@opscode.com>)
-# Copyright:: Copyright (c) 2008 Opscode, Inc.
+# Author:: Adam Jacob (<adam@chef.io>)
+# Copyright:: Copyright 2008-2017, Chef Software Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,24 +16,39 @@
 # limitations under the License.
 #
 
+# require "chef/log"
+# require "chef/exceptions"
+# require "chef/mixin/params_validate"
+# require "chef/version_constraint/platform"
+# require "chef/provider"
+
 class Chef
   class Platform
+
     class << self
-      # alias_method :old_platforms, :platforms
-      def platforms
-        @platforms ||= patch_platform(old_platforms)
-      end
+      def find_platform_and_version(node)
+        platform = nil
+        version = nil
 
-      def patch_platform(pf)
-        pf[:redhat][:default][:service] = Chef::Provider::Service::Systemd
-        pf[:redhat]["< 7"] ||= {}
-        pf[:redhat]["< 7"][:service] = Chef::Provider::Service::Redhat
+        if node[:platform]
+          platform = node[:platform]
+        elsif node.attribute?("os")
+          platform = node[:os]
+        end
 
-        pf[:centos][:default][:service] = Chef::Provider::Service::Systemd
-        pf[:centos]["< 7"] ||= {}
-        pf[:centos]["< 7"][:service] = Chef::Provider::Service::Redhat
+        raise ArgumentError, "Cannot find a platform for #{node}" unless platform
 
-        pf
+        if node[:platform_version]
+          version = node[:platform_version]
+        elsif node[:os_version]
+          version = node[:os_version]
+        elsif node[:os_release]
+          version = node[:os_release]
+        end
+
+        raise ArgumentError, "Cannot find a version for #{node}" unless version
+
+        [platform, version]
       end
     end
   end
