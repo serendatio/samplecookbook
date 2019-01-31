@@ -73,25 +73,3 @@ service "nginx" do
   action [ :enable, :start ]
 end
 
-# Test
-include_recipe 'deploy'
-
-Chef::Log.info("********* Running custom deploy::custom-common ***********")
-
-node[:deploy].each do |application, deploy|
-
-    # Setup application directory, based on opsworks script with overwritten custom variable
-    opsworks_deploy_dir do
-        user  deploy[:user]
-        group deploy[:group]
-        path  deploy[:deploy_to]
-    end
-
-    # Deploy application based on opsworks script
-    opsworks_deploy do
-        deploy_data deploy
-        app application
-    end
-
-end
-
