@@ -1,4 +1,18 @@
 define :opsworks_deploy_user do
+  # Helper
+  def next_free_uid(starting_from = 4000)
+    candidate = starting_from
+    existing_uids = @@allocated_uids
+    (node[:passwd] || node[:etc][:passwd]).each do |username, entry|
+      existing_uids << entry[:uid] unless existing_uids.include?(entry[:uid])
+    end
+    while existing_uids.include?(candidate) do
+      candidate += 1
+    end
+    @@allocated_uids << candidate
+    candidate
+  end
+  
   deploy = params[:deploy_data]
 
   group deploy[:group]
@@ -18,18 +32,4 @@ define :opsworks_deploy_user do
       existing_usernames.include?(deploy[:user])
     end
   end
-end
-
-# Helper
-def next_free_uid(starting_from = 4000)
-  candidate = starting_from
-  existing_uids = @@allocated_uids
-  (node[:passwd] || node[:etc][:passwd]).each do |username, entry|
-    existing_uids << entry[:uid] unless existing_uids.include?(entry[:uid])
-  end
-  while existing_uids.include?(candidate) do
-    candidate += 1
-  end
-  @@allocated_uids << candidate
-  candidate
 end
