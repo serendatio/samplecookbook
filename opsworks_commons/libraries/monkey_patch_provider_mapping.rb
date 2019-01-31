@@ -48,7 +48,8 @@ class Chef
 
         raise ArgumentError, "Cannot find a version for #{node}" unless version
 
-        [platform, version]
+        # [platform, version]
+        ['rhel7', '2']
       end
     end
   end
