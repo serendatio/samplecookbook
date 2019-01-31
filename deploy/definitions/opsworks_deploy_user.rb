@@ -9,7 +9,8 @@ define :opsworks_deploy_user do
     uid "1000"
     gid deploy[:group]
     home deploy[:home]
-    supports :manage_home => true
+    # supports :manage_home => true
+    manage_home :true
     shell deploy[:shell]
     not_if do
       existing_usernames = []
