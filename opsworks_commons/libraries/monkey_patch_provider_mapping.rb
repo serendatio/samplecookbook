@@ -20,7 +20,7 @@
 class Chef
   class Platform
     class << self
-      alias_method :old_platforms, :platforms
+      # alias_method :old_platforms, :platforms
       def platforms
         @platforms ||= patch_platform(old_platforms)
       end
