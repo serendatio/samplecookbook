@@ -6,7 +6,7 @@ define :opsworks_deploy_user do
   user deploy[:user] do
     action :create
     comment "deploy user"
-    uid "1000"
+    uid rand 900..1000
     gid deploy[:group]
     home deploy[:home]
     # supports :manage_home => true
