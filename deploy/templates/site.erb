@@ -1,0 +1,6 @@
+<% unless @config_file.empty? %>
+# Include the Custom Config File
+include <%= @config_file %>;
+<% else %>
+# Warning: nginx.conf file not found, this site probably won't work
+<% end %>
