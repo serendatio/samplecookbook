@@ -14,8 +14,6 @@
 # See also: http://docs.aws.amazon.com/opsworks/latest/userguide/customizing.html
 ###
 
-Chef::Log.info("********* #{node[:platform_family]} ***********")
-
 case node[:platform_family]
 when "debian"
   default[:nginx][:dir]        = "/etc/nginx"
@@ -27,7 +25,7 @@ when "debian"
   else
     default[:nginx][:pid_file] = "/var/run/nginx.pid"
   end
-when "rhel"
+when "amazon"
   default[:nginx][:dir]        = "/etc/nginx"
   default[:nginx][:log_dir]    = "/var/log/nginx"
   default[:nginx][:user]       = "nginx"
