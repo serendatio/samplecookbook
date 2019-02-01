@@ -30,38 +30,38 @@ define :nginx_web_app, :template => "site.erb", :enable => true do
     mode 0600
   end
 
-  template "#{node[:nginx][:dir]}/ssl/#{application[:domains].first}.crt" do
-    cookbook 'nginx'
-    mode '0600'
-    source "ssl.key.erb"
-    variables :key => application[:ssl_certificate]
-    notifies :restart, "service[nginx]"
-    only_if do
-      application[:ssl_support]
-    end
-  end
+  # template "#{node[:nginx][:dir]}/ssl/#{application[:domains].first}.crt" do
+  #   cookbook 'nginx'
+  #   mode '0600'
+  #   source "ssl.key.erb"
+  #   variables :key => application[:ssl_certificate]
+  #   notifies :restart, "service[nginx]"
+  #   only_if do
+  #     application[:ssl_support]
+  #   end
+  # end
 
-  template "#{node[:nginx][:dir]}/ssl/#{application[:domains].first}.key" do
-    cookbook 'nginx'
-    mode '0600'
-    source "ssl.key.erb"
-    variables :key => application[:ssl_certificate_key]
-    notifies :restart, "service[nginx]"
-    only_if do
-      application[:ssl_support]
-    end
-  end
+  # template "#{node[:nginx][:dir]}/ssl/#{application[:domains].first}.key" do
+  #   cookbook 'nginx'
+  #   mode '0600'
+  #   source "ssl.key.erb"
+  #   variables :key => application[:ssl_certificate_key]
+  #   notifies :restart, "service[nginx]"
+  #   only_if do
+  #     application[:ssl_support]
+  #   end
+  # end
 
-  template "#{node[:nginx][:dir]}/ssl/#{application[:domains].first}.ca" do
-    cookbook 'nginx'
-    mode '0600'
-    source "ssl.key.erb"
-    variables :key => application[:ssl_certificate_ca]
-    notifies :restart, "service[nginx]"
-    only_if do
-      application[:ssl_support] && application[:ssl_certificate_ca]
-    end
-  end
+  # template "#{node[:nginx][:dir]}/ssl/#{application[:domains].first}.ca" do
+  #   cookbook 'nginx'
+  #   mode '0600'
+  #   source "ssl.key.erb"
+  #   variables :key => application[:ssl_certificate_ca]
+  #   notifies :restart, "service[nginx]"
+  #   only_if do
+  #     application[:ssl_support] && application[:ssl_certificate_ca]
+  #   end
+  # end
 
   file "#{node[:nginx][:dir]}/sites-enabled/default" do
     action :delete
