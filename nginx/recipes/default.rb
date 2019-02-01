@@ -77,6 +77,16 @@ directory "#{node['nginx']['deploy_dir']}" do
   action :create
 end
 
+# Create default nginx folder for app deployment
+directory "/etc/nginx/sites-available" do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  recursive true
+  action :create
+end
+
+ 
 # Start nginx
 service "nginx" do
   action [ :enable, :start ]
