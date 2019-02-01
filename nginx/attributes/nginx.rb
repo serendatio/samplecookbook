@@ -14,6 +14,8 @@
 # See also: http://docs.aws.amazon.com/opsworks/latest/userguide/customizing.html
 ###
 
+Chef::Log.info("********* #{node[:platform_family]} ***********")
+
 case node[:platform_family]
 when "debian"
   default[:nginx][:dir]        = "/etc/nginx"
