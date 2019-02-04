@@ -22,8 +22,8 @@ node[:deploy].each do |application, deploy|
 	aws_s3_file "/tmp/#{app['shortname']}.zip" do
 	  bucket "serend-codebuild-bucket"
 	  remote_path "#{app['app_source']['url']}"
-	  aws_access_key_id "#{app[environment]['custom_access_key']}"
-	  aws_secret_access_key "#{app[environment]['custom_secret_key']}"
+	  aws_access_key_id "#{app[environment_variables]['custom_access_key']}"
+	  aws_secret_access_key "#{app[environment_variables]['custom_secret_key']}"
 	  region "us-west-2"
 	end
 
