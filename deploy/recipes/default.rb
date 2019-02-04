@@ -19,7 +19,7 @@ end
 
 node[:deploy].each do |application, deploy|
 
-	aws_s3_file "/tmp/#{app['app_source']['url']}" do
+	aws_s3_file "/tmp/#{app['shortname']}.zip" do
 	  bucket "https://s3-us-west-2.amazonaws.com/serend-codebuild-bucket"
 	  remote_path "#{app['app_source']['url']}"
 	  aws_access_key_id node[:custom_access_key]
