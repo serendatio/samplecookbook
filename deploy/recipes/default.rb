@@ -17,14 +17,19 @@ search("aws_opsworks_app").each do |app|
   Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' **********")
 end
 
+aws = data_bag_item('aws', 'dev')
+
 node[:deploy].each do |application, deploy|
 
-	aws_s3_file "/tmp/#{app['shortname']}.zip" do
-	  bucket "serend-codebuild-bucket"
-	  remote_path "#{app['app_source']['url']}"
-	  aws_access_key_id node[:custom_access_key]
-	  aws_secret_access_key node[:custom_secret_key]
-	  region "us-west-2"
-	end
+	# aws_s3_file "/tmp/#{app['shortname']}.zip" do
+	#   bucket "serend-codebuild-bucket"
+	#   remote_path "#{app['app_source']['url']}"
+	#   aws_access_key_id node[:custom_access_key]
+	#   aws_secret_access_key node[:custom_secret_key]
+	#   region "us-west-2"
+	# end
+
+	Chef::Log.info("********** #{aws['aws_access_key_id']} **********")
+	Chef::Log.info("********** #{aws['aws_secret_access_key']} **********")
 
 end
