@@ -20,6 +20,7 @@ end
 
 node[:deploy].each do |application, deploy|
 
+	# Transfer source file from S3
 	aws_s3_file "/tmp/#{app['shortname']}-#{node['env']}.zip" do
 	  bucket "serend-codebuild-bucket"
 	  remote_path "#{app['shortname']}-#{node['env']}.zip"
@@ -28,7 +29,17 @@ node[:deploy].each do |application, deploy|
 	  region "us-west-2"
 	  action :create
 	end
-	
+
+	# Create the folder for nginx root if it does not already exist
+	time =  Time.new.strftime("%Y%m%d%H%M%S")
+	directory node[:nginx][:root_dir]"#{app['shortname']}/"time do
+	    owner  'root'
+	    group  'root'
+	    mode   '0755'
+	    action :create
+	    recursive true
+	end
+
 	Chef::Log.info("********** #{node['aws_access_key_id']} **********")
 	Chef::Log.info("********** #{node['aws_secret_access_key']} **********")
 
