@@ -20,18 +20,15 @@ end
 
 node[:deploy].each do |application, deploy|
 
-	aws_s3_file "/tmp/#{app['shortname']}.zip" do
+	aws_s3_file "/tmp/#{app['shortname']}-#{node['env']}.zip" do
 	  bucket "serend-codebuild-bucket"
-	  remote_path "serend-dev.zip"
+	  remote_path "#{app['shortname']}-#{node['env']}.zip"
 	  aws_access_key_id "#{node['aws_access_key_id']}"
 	  aws_secret_access_key "#{node['aws_secret_access_key']}"
 	  region "us-west-2"
 	  action :create
 	end
-
-	# Chef::Log.info("********** #{aws['aws_access_key_id']} **********")
-	# Chef::Log.info("********** #{aws['aws_secret_access_key']} **********")
-
+	
 	Chef::Log.info("********** #{node['aws_access_key_id']} **********")
 	Chef::Log.info("********** #{node['aws_secret_access_key']} **********")
 
