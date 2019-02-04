@@ -46,7 +46,7 @@ node[:deploy].each do |application, deploy|
 	bash "deploy_application" do 
 		user "root"
         code <<-EOH
-            unzip /tmp/#{app['shortname']}-#{node['env']}.zip -d /mnt/nginx/#{app['shortname']}/+time 
+            unzip /tmp/#{app['shortname']}-#{node['env']}.zip -d /mnt/nginx/#{app['shortname']}/#{time} 
         EOH
 	end
 
