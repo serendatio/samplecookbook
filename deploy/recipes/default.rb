@@ -8,6 +8,15 @@ include_recipe 'aws'
 
 Chef::Log.info("********* Running deploy::default ***********")
 
+app = search("aws_opsworks_app").first
+Chef::Log.info("********** The app's short name is '#{app['shortname']}' **********")
+Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' **********")
+
+search("aws_opsworks_app").each do |app|
+  Chef::Log.info("********** The app's short name is '#{app['shortname']}' **********")
+  Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' **********")
+end
+
 node[:deploy].each do |application, deploy|
 
 	Chef::Log.info("********* #{application}, #{deploy[:application]} ***********")
