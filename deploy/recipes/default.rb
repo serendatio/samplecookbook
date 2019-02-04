@@ -48,11 +48,21 @@ node[:deploy].each do |application, deploy|
         code <<-EOH
             unzip /tmp/#{app['shortname']}-#{node['env']}.zip -d /mnt/nginx/#{app['shortname']}/#{time}
             ln -sfn /mnt/nginx/#{app['shortname']}/#{time} /mnt/nginx/#{app['shortname']}/current
+            ln -sfn /mnt/nginx/#{app['shortname']}/current/nginx.conf /etc/nginx/conf.d/#{app['shortname']}.conf
             rm /tmp/#{app['shortname']}-#{node['env']}.zip 
         EOH
 	end
 
-	Chef::Log.info("********** #{node['aws_access_key_id']} **********")
-	Chef::Log.info("********** #{node['aws_secret_access_key']} **********")
+	# Reload nginx service
+    service 'nginx' do
+        supports :status => true, :start => true, :stop => true, :restart => true, :reload => true
+        action [:reload]
+    end
+
+    # Restart php-fpm service
+    service 'php-fpm' do
+        supports :status => true, :start => true, :stop => true, :restart => true, :reload => true
+        action [:restart]
+    end
 
 end
