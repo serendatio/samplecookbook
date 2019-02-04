@@ -11,6 +11,8 @@ Chef::Log.info("********* Running deploy::default ***********")
 node[:deploy].each do |application, deploy|
 
 	Chef::Log.info("********* #{application}, #{deploy[:application]} ***********")
+	Chef::Log.info("********* #{node[:deploy][application]} ***********")
+	
 
 	# aws_s3_file "/tmp/#{deploy[:application]}" do
 	#   bucket "test-site-config"
