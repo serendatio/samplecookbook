@@ -19,15 +19,11 @@ end
 
 node[:deploy].each do |application, deploy|
 
-	Chef::Log.info("********* #{application}, #{deploy[:application]} ***********")
-	Chef::Log.info("********* #{node[:app][:name]} ***********")
-	
-
-	# aws_s3_file "/tmp/#{deploy[:application]}" do
-	#   bucket "test-site-config"
-	#   remote_path "vhost.map"
-	#   aws_access_key_id node[:custom_access_key]
-	#   aws_secret_access_key node[:custom_secret_key]
-	# end
+	aws_s3_file "/tmp/#{app['app_source']['url']}" do
+	  bucket "https://s3-us-west-2.amazonaws.com/serend-codebuild-bucket"
+	  remote_path "#{app['app_source']['url']}"
+	  aws_access_key_id node[:custom_access_key]
+	  aws_secret_access_key node[:custom_secret_key]
+	end
 
 end
