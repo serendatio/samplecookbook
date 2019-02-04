@@ -30,14 +30,24 @@ node[:deploy].each do |application, deploy|
 	  action :create
 	end
 
-	# Create the folder for nginx root if it does not already exist
+	# Timestamp variable
 	time =  Time.new.strftime("%Y%m%d%H%M%S")
+
+	# Create the folder for nginx root if it does not already exist
 	directory "/mnt/nginx/#{app['shortname']}/"+time do
 	    owner  'root'
 	    group  'root'
 	    mode   '0755'
 	    action :create
 	    recursive true
+	end
+
+	# Move files
+	bash "deploy_application" do 
+		user "root"
+        code <<-EOH
+            unzip /tmp/#{app['shortname']}-#{node['env']}.zip -d /mnt/nginx/#{app['shortname']}/+time 
+        EOH
 	end
 
 	Chef::Log.info("********** #{node['aws_access_key_id']} **********")
