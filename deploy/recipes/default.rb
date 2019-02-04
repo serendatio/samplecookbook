@@ -11,7 +11,7 @@ Chef::Log.info("********* Running deploy::default ***********")
 node[:deploy].each do |application, deploy|
 
 	Chef::Log.info("********* #{application}, #{deploy[:application]} ***********")
-	Chef::Log.info("********* #{node["opsworks"]["applications"]["i"]["name"]} ***********")
+	Chef::Log.info("********* #{node[:app][:name]} ***********")
 	
 
 	# aws_s3_file "/tmp/#{deploy[:application]}" do
