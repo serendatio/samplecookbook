@@ -17,7 +17,6 @@ search("aws_opsworks_app").each do |app|
   Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' **********")
 end
 
-aws = data_bag_item('aws', 'dev')
 
 node[:deploy].each do |application, deploy|
 
@@ -29,7 +28,10 @@ node[:deploy].each do |application, deploy|
 	#   region "us-west-2"
 	# end
 
-	Chef::Log.info("********** #{aws['aws_access_key_id']} **********")
-	Chef::Log.info("********** #{aws['aws_secret_access_key']} **********")
+	# Chef::Log.info("********** #{aws['aws_access_key_id']} **********")
+	# Chef::Log.info("********** #{aws['aws_secret_access_key']} **********")
+
+	Chef::Log.info("********** #{node['aws_access_key_id']} **********")
+	Chef::Log.info("********** #{node['aws_secret_access_key']} **********")
 
 end
