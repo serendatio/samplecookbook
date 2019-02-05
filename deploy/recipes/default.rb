@@ -25,6 +25,8 @@ end
 
 Chef::Log.info("********** The RDS instance's address is '#{rds_db_instance['address']}' **********")
 Chef::Log.info("********** The RDS instance's database engine type is '#{rds_db_instance['engine']}' **********")
+Chef::Log.info("********** The RDS instance's address is '#{node['rds_user']}' **********")
+Chef::Log.info("********** The RDS instance's database engine type is '#{node['rds_password']}' **********")
 
 
 node[:deploy].each do |application, deploy|
