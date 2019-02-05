@@ -71,8 +71,8 @@ node[:deploy].each do |application, deploy|
 	        :db_user => "#{node['rds_user']}",
 	        :db_password => "#{node['rds_password']}",
 	        :db_host => "#{rds_db_instance['address']}",
-	        :wp_env => "#{node['environment']}",,
-	        :wp_home => "#{app['domains'][0]}",
+	        :wp_env => "#{node['environment']}",
+	        :wp_home => "#{app['domains'][0]}"
 	    )
 	end
 
