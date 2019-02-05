@@ -16,9 +16,9 @@ search("aws_opsworks_app").each do |app|
   Chef::Log.info("********** The app's short name is '#{app['shortname']}' **********")
   Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' **********")
   Chef::Log.info("********** The app's URL is '#{app['data_sources']}' **********")
-  Chef::Log.info("********** The app's URL is '#{app['data_sources']['0']['database_name']}' **********")
-  Chef::Log.info("********** The app's URL is '#{app['data_sources']['0']['type']}' **********")
-  Chef::Log.info("********** The app's URL is '#{app['data_sources']['0']['arn']}' **********")
+  Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['database_name']}' **********")
+  Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['type']}' **********")
+  Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['arn']}' **********")
 end
 
 
