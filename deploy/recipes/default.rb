@@ -15,6 +15,10 @@ Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' ******
 search("aws_opsworks_app").each do |app|
   Chef::Log.info("********** The app's short name is '#{app['shortname']}' **********")
   Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' **********")
+  Chef::Log.info("********** The app's URL is '#{app['data_sources']}' **********")
+  Chef::Log.info("********** The app's URL is '#{app['data_sources']['database_name']}' **********")
+  Chef::Log.info("********** The app's URL is '#{app['data_sources']['type']}' **********")
+  Chef::Log.info("********** The app's URL is '#{app['data_sources']['arn']}' **********")
 end
 
 
