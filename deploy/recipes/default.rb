@@ -68,7 +68,7 @@ node[:deploy].each do |application, deploy|
 	    mode   '0700'
 	    variables(
 	        :db_name => "#{app['data_sources'][0]['database_name']}",
-	        :db_user => "#{rds_db_instance['rds_user']}",
+	        :db_user => "#{rds_db_instance['db_user']}",
 	        :db_password => "#{rds_db_instance['db_password']}",
 	        :db_host => "#{rds_db_instance['address']}",
 	        :wp_env => "#{node['environment']}",
