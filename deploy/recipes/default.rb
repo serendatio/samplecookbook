@@ -54,12 +54,12 @@ node[:deploy].each do |application, deploy|
 	end
 
 	# Test 
-	bash "test_sed" do 
-		user "root"
-        code <<-EOH
-        	ls -t /mnt/nginx/#{app['shortname']} | sed -e "1,5d"
-        EOH
-	end
+	# bash "test_sed" do 
+	# 	user "root"
+    #     code <<-EOH
+ 	#       ls -t /mnt/nginx/#{app['shortname']} | sed -e "1,5d"
+ 	#     EOH
+	# end
 
 	# Remove old backups
 	execute "remove_backups" do
