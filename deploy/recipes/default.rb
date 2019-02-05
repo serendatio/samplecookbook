@@ -62,7 +62,6 @@ node[:deploy].each do |application, deploy|
         EOH
 	end
 
-	Chef::Log.info("********** environment '#{app['environment']}' **********")
 	# Create .env file from the template
 	template "/mnt/nginx/#{app['shortname']}/current/.env" do
 	    source 'env.erb'
@@ -72,7 +71,7 @@ node[:deploy].each do |application, deploy|
 	        :db_user => "#{rds_db_instance['db_user']}",
 	        :db_password => "#{rds_db_instance['db_password']}",
 	        :db_host => "#{rds_db_instance['address']}",
-	        :wp_env => "#{node['environment']}",
+	        :wp_env => "#{app['environment']['environment']}",
 	        :wp_home => "#{app['domains'][0]}"
 	    )
 	end
