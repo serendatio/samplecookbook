@@ -25,8 +25,6 @@ end
 
 Chef::Log.info("********** The RDS instance's address is '#{rds_db_instance['address']}' **********")
 Chef::Log.info("********** The RDS instance's database engine type is '#{rds_db_instance['engine']}' **********")
-Chef::Log.info("********** The RDS instance's address is '#{node['rds_user']}' **********")
-Chef::Log.info("********** The RDS instance's database engine type is '#{node['rds_password']}' **********")
 
 
 node[:deploy].each do |application, deploy|
@@ -70,8 +68,8 @@ node[:deploy].each do |application, deploy|
 	    mode   '0700'
 	    variables(
 	        :db_name => "#{app['data_sources'][0]['database_name']}",
-	        :db_user => "#{node['rds_user']}",
-	        :db_password => "#{node['rds_password']}",
+	        :db_user => "#{rds_db_instance['rds_user']}",
+	        :db_password => "#{rds_db_instance['db_password']}",
 	        :db_host => "#{rds_db_instance['address']}",
 	        :wp_env => "#{node['environment']}",
 	        :wp_home => "#{app['domains'][0]}"
