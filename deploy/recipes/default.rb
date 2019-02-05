@@ -21,6 +21,10 @@ search("aws_opsworks_app").each do |app|
   Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['arn']}' **********")
 end
 
+rds_db_instance = search("aws_opsworks_rds_db_instance").first
+Chef::Log.info("********** The RDS instance's address is '#{rds_db_instance['address']}' **********")
+Chef::Log.info("********** The RDS instance's database engine type is '#{rds_db_instance['engine']}' **********")
+
 
 node[:deploy].each do |application, deploy|
 
