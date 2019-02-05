@@ -65,7 +65,7 @@ node[:deploy].each do |application, deploy|
 	# Create .env file from the template
 	template "/mnt/nginx/#{app['shortname']}/current/.env" do
 	    source 'env.erb'
-	    mode   '0700'
+	    mode   '0777'
 	    variables(
 	        :db_name => "#{app['data_sources'][0]['database_name']}",
 	        :db_user => "#{rds_db_instance['db_user']}",
