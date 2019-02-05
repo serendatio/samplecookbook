@@ -57,7 +57,7 @@ node[:deploy].each do |application, deploy|
 	bash "remove_backups" do 
 		user "root"
         code <<-EOH
-        	ls -t /mnt/nginx/#{app['shortname']} | sed -e '1,5d' | xargs -d '\n' rm -rf
+        	ls -t /mnt/nginx/#{app['shortname']} | sed -e '1,5d' | xargs -d "\n" rm -rf
         EOH
 	end
 
