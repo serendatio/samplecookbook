@@ -9,6 +9,8 @@ include_recipe 'aws'
 Chef::Log.info("********* Running deploy::default ***********")
 
 app = search("aws_opsworks_app").first
+rds_db_instance = search("aws_opsworks_rds_db_instance").first
+
 Chef::Log.info("********** The app's short name is '#{app['shortname']}' **********")
 Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' **********")
 
@@ -21,7 +23,6 @@ search("aws_opsworks_app").each do |app|
   Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['arn']}' **********")
 end
 
-rds_db_instance = search("aws_opsworks_rds_db_instance").first
 Chef::Log.info("********** The RDS instance's address is '#{rds_db_instance['address']}' **********")
 Chef::Log.info("********** The RDS instance's database engine type is '#{rds_db_instance['engine']}' **********")
 
@@ -59,6 +60,20 @@ node[:deploy].each do |application, deploy|
             ln -sfn /mnt/nginx/#{app['shortname']}/current/nginx.conf /etc/nginx/conf.d/#{app['shortname']}.conf
             rm /tmp/#{app['shortname']}-#{node['env']}.zip 
         EOH
+	end
+
+	# Create .env file from the template
+	template "/mnt/nginx/#{app['shortname']}/current/.env" do
+	    source 'env.erb'
+	    mode   '0700'
+	    variables(
+	        :db_name => "#{app['data_sources'][0]['database_name']}",
+	        :db_user => "#{node['rds_user']}",
+	        :db_password => "#{node['rds_password']}",
+	        :db_host => "#{rds_db_instance['address']}",
+	        :wp_env => "#{node['environment']}",,
+	        :wp_home => "#{app['domains'][0]}",
+	    )
 	end
 
 	# Test 
