@@ -53,6 +53,14 @@ node[:deploy].each do |application, deploy|
         EOH
 	end
 
+	# Remove old backups
+	bash "remove_backups" do 
+		user "root"
+        code <<-EOH
+        	ls -t /mnt/nginx/#{app['shortname']} | sed -e '1,5d' | xargs -d '\\n' rm -rf
+        EOH
+	end
+
 	# Reload nginx service
     service 'nginx' do
         supports :status => true, :start => true, :stop => true, :restart => true, :reload => true
