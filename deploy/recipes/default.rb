@@ -62,6 +62,7 @@ node[:deploy].each do |application, deploy|
         EOH
 	end
 
+	Chef::Log.info("********** environment '#{app['environment']}' **********")
 	# Create .env file from the template
 	template "/mnt/nginx/#{app['shortname']}/current/.env" do
 	    source 'env.erb'
