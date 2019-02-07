@@ -55,7 +55,7 @@ node[:deploy].each do |application, deploy|
 	directory "/mnt/nginx/#{app['shortname']}/uploads" do
 	    owner  'root'
 	    group  'root'
-	    mode   '0755'
+	    mode   '0777'
 	    action :create
 	    recursive true
 	end
