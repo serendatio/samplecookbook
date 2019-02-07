@@ -51,6 +51,15 @@ node[:deploy].each do |application, deploy|
 	    recursive true
 	end
 
+	# Create the folder for shared uploads folder
+	directory "/mnt/nginx/#{app['shortname']}/uploads" do
+	    owner  'root'
+	    group  'root'
+	    mode   '0755'
+	    action :create
+	    recursive true
+	end
+
 	# Move files and symlink to current target
 	bash "deploy_application" do 
 		user "root"
@@ -58,6 +67,7 @@ node[:deploy].each do |application, deploy|
             unzip /tmp/#{app['shortname']}-#{node['env']}.zip -d /mnt/nginx/#{app['shortname']}/#{time}
             ln -sfn /mnt/nginx/#{app['shortname']}/#{time} /mnt/nginx/#{app['shortname']}/current
             ln -sfn /mnt/nginx/#{app['shortname']}/current/nginx.conf /etc/nginx/conf.d/#{app['shortname']}.conf
+            ln -sfn /mnt/nginx/#{app['shortname']}/uploads /mnt/nginx/#{app['shortname']}/current/web/app/uploads	
             rm /tmp/#{app['shortname']}-#{node['env']}.zip 
         EOH
 	end
@@ -74,12 +84,6 @@ node[:deploy].each do |application, deploy|
 	        :wp_env => "#{app['environment']['environment']}",
 	        :wp_home => "https://#{app['domains'][0]}"
 	    )
-	end
-
-	# Change permission to uploads folder
-	execute "change_permission" do
-		command "chmod 755 /mnt/nginx/#{app['shortname']}/#{time}/web/app/uploads"
-    	action :run
 	end
 
 	# Test 
