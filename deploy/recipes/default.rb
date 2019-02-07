@@ -76,6 +76,12 @@ node[:deploy].each do |application, deploy|
 	    )
 	end
 
+	# Change permission to uploads folder
+	execute "change_permission" do
+		command "chmod 755 /mnt/nginx/#{app['shortname']}/current/web/app/uploads"
+    	action :run
+	end
+
 	# Test 
 	# bash "test_sed" do 
 	# 	user "root"
