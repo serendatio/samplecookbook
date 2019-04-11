@@ -21,5 +21,6 @@ script 'amazon extras' do
 		sudo amazon-linux-extras install memcached1.5 -y
 		sudo amazon-linux-extras install php7.2 -y
 		sudo yum install php-pear php-devel gcc libzip-devel zlib-devel php-zip php-gd php-apc php-pspell php-xmlrpc php-pecl-mcrypt -y
+		sudo yum install -y amazon-efs-utils
 	EOH
 end
