@@ -17,19 +17,6 @@ search("aws_opsworks_app").each do |app|
     Chef::Log.info("********** The app's URL is '#{app['enable_ssl']}' **********")
     Chef::Log.info("********** The app's URL is '#{app['environment']}' **********")
 
-end
-
-
-
-node[:deploy].each do |application, deploy|
-
-
-Chef::Log.info("********* Info: #{node[:letsencrypt_efs_volume_id]} ***********")
-Chef::Log.info("********* Info: #{deploy[:application]} ***********")
-Chef::Log.info("********* Info: #{application} ***********")
-Chef::Log.info("********* Info: #{deploy} ***********")
-Chef::Log.info("********* Info: #{deploy} ***********")
-
     # SSL Config
     directory "#{node[:custom_ssl][:dir]}" do
         action :create
@@ -38,35 +25,35 @@ Chef::Log.info("********* Info: #{deploy} ***********")
         mode '0600'
     end
 
-    # Load Certificate (if specified by App)
-    template "#{node[:custom_ssl][:dir]}/#{deploy[:application]}.crt" do
-        mode '0600'
-        source "ssl.erb"
-        variables :data => deploy[:ssl_certificate]
-        only_if do
-            deploy[:ssl_support]
-        end
-    end
+    # # Load Certificate (if specified by App)
+    # template "#{node[:custom_ssl][:dir]}/#{app['shortname']}.crt" do
+    #     mode '0600'
+    #     source "ssl.erb"
+    #     variables :data => deploy[:ssl_certificate]
+    #     only_if do
+    #         deploy[:ssl_support]
+    #     end
+    # end
 
-    # Load Certificate Key (if specified by App)
-    template "#{node[:custom_ssl][:dir]}/#{deploy[:application]}.key" do
-        mode '0600'
-        source "ssl.erb"
-        variables :data => deploy[:ssl_certificate_key]
-        only_if do
-            deploy[:ssl_support]
-        end
-    end
+    # # Load Certificate Key (if specified by App)
+    # template "#{node[:custom_ssl][:dir]}/#{app['shortname']}.key" do
+    #     mode '0600'
+    #     source "ssl.erb"
+    #     variables :data => deploy[:ssl_certificate_key]
+    #     only_if do
+    #         deploy[:ssl_support]
+    #     end
+    # end
 
-    # Load Certificate Authority (if specified by App)
-    template "#{node[:custom_ssl][:dir]}/#{deploy[:application]}.ca" do
-        mode '0600'
-        source "ssl.erb"
-        variables :data => deploy[:ssl_certificate_ca]
-        only_if do
-            deploy[:ssl_support] && deploy[:ssl_certificate_ca]
-        end
-    end
+    # # Load Certificate Authority (if specified by App)
+    # template "#{node[:custom_ssl][:dir]}/#{app['shortname']}.ca" do
+    #     mode '0600'
+    #     source "ssl.erb"
+    #     variables :data => deploy[:ssl_certificate_ca]
+    #     only_if do
+    #         deploy[:ssl_support] && deploy[:ssl_certificate_ca]
+    #     end
+    # end
 
     # Create a Self-Signed Certificate (if one was NOT specified by App)
     script 'create self-signed certificate' do
@@ -97,10 +84,10 @@ Chef::Log.info("********* Info: #{deploy} ***********")
 
             # Prepare
             cd /var/tmp
-            rm -f #{deploy[:application]}.key
-            rm -f #{deploy[:application]}.key.org
-            rm -f #{deploy[:application]}.csr
-            rm -f #{deploy[:application]}.crt
+            rm -f #{app['shortname']}.key
+            rm -f #{app['shortname']}.key.org
+            rm -f #{app['shortname']}.csr
+            rm -f #{app['shortname']}.crt
 
             # Generate a passphrase
             export PASSPHRASE=$(head -c 500 /dev/urandom | tr -dc a-z0-9A-Z | head -c 128; echo)
@@ -109,7 +96,7 @@ Chef::Log.info("********* Info: #{deploy} ***********")
             subj="/C=CA/ST=British Columbia/L=Vancouver/O=serend.io"
 
             # Generate the server private key
-            openssl genrsa -des3 -out #{deploy[:application]}.key -passout env:PASSPHRASE 2048
+            openssl genrsa -des3 -out #{app['shortname']}.key -passout env:PASSPHRASE 2048
             fail_if_error $?
 
             # Generate the CSR
@@ -117,33 +104,40 @@ Chef::Log.info("********* Info: #{deploy} ***********")
                 -new \
                 -batch \
                 -subj "$(echo -n "$subj" | tr "\n" "/")" \
-                -key #{deploy[:application]}.key \
-                -out #{deploy[:application]}.csr \
+                -key #{app['shortname']}.key \
+                -out #{app['shortname']}.csr \
                 -passin env:PASSPHRASE
             fail_if_error $?
-            cp #{deploy[:application]}.key #{deploy[:application]}.key.org
+            cp #{app['shortname']}.key #{app['shortname']}.key.org
             fail_if_error $?
 
             # Strip the password so we don't have to type it every time we restart Apache
-            openssl rsa -in #{deploy[:application]}.key.org -out #{deploy[:application]}.key -passin env:PASSPHRASE
+            openssl rsa -in #{app['shortname']}.key.org -out #{app['shortname']}.key -passin env:PASSPHRASE
             fail_if_error $?
 
             # Generate the certificate (good for 10 years)
-            openssl x509 -req -days 3650 -in #{deploy[:application]}.csr -signkey #{deploy[:application]}.key -out #{deploy[:application]}.crt
+            openssl x509 -req -days 3650 -in #{app['shortname']}.csr -signkey #{app['shortname']}.key -out #{app['shortname']}.crt
             fail_if_error $?
 
             # Set Permissions
-            chmod 600 #{deploy[:application]}.key
-            chmod 600 #{deploy[:application]}.crt
+            chmod 600 #{app['shortname']}.key
+            chmod 600 #{app['shortname']}.crt
 
             # Move Certificate in place
-            mv -f #{deploy[:application]}.key #{node[:custom_ssl][:dir]}
-            mv -f #{deploy[:application]}.crt #{node[:custom_ssl][:dir]}
+            mv -f #{app['shortname']}.key #{node[:custom_ssl][:dir]}
+            mv -f #{app['shortname']}.crt #{node[:custom_ssl][:dir]}
 
             # Clean up
-            rm -f #{deploy[:application]}.key.org
-            rm -f #{deploy[:application]}.csr
+            rm -f #{app['shortname']}.key.org
+            rm -f #{app['shortname']}.csr
         EOH
     end
+
+end
+
+
+
+node[:deploy].each do |application, deploy|
+
 
 end
