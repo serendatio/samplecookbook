@@ -86,7 +86,7 @@ node[:deploy].each do |application, deploy|
             export PASSPHRASE=$(head -c 500 /dev/urandom | tr -dc a-z0-9A-Z | head -c 128; echo)
 
             # Certificate details; replace items in angle brackets with your own info
-            subj="/C=CA/ST=British Columbia/L=Vancouver/O=serend#{deploy[:domains].map{ |k| "/CN=#{k}" }.join}"
+            subj="/C=CA/ST=British Columbia/L=Vancouver/O=serend.io"
 
             # Generate the server private key
             openssl genrsa -des3 -out #{deploy[:application]}.key -passout env:PASSPHRASE 2048
