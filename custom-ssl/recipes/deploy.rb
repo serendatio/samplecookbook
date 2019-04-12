@@ -10,6 +10,12 @@ Chef::Log.info("********* Running custom-ssl::deploy ***********")
 
 node[:deploy].each do |application, deploy|
 
+
+Chef::Log.info("********* Info: #{node[:letsencrypt_efs_volume_id]} ***********")
+Chef::Log.info("********* Info: #{deploy[:application]} ***********")
+Chef::Log.info("********* Info: #{application} ***********")
+Chef::Log.info("********* Info: #{app['shortname']} ***********")
+
     # SSL Config
     directory "#{node[:custom_ssl][:dir]}" do
         action :create
