@@ -7,6 +7,19 @@ include_recipe 'deploy'
 
 Chef::Log.info("********* Running custom-ssl::deploy ***********")
 
+search("aws_opsworks_app").each do |app|
+
+    Chef::Log.info("********** The app's short name is '#{app['shortname']}' **********")
+    Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' **********")
+    Chef::Log.info("********** The app's URL is '#{app['attributes']}' **********")
+    Chef::Log.info("********** The app's URL is '#{app['data_sources']}' **********")
+    Chef::Log.info("********** The app's URL is '#{app['domains']}' **********")
+    Chef::Log.info("********** The app's URL is '#{app['enable_ssl']}' **********")
+    Chef::Log.info("********** The app's URL is '#{app['environment']}' **********")
+
+end
+
+
 
 node[:deploy].each do |application, deploy|
 
@@ -14,6 +27,7 @@ node[:deploy].each do |application, deploy|
 Chef::Log.info("********* Info: #{node[:letsencrypt_efs_volume_id]} ***********")
 Chef::Log.info("********* Info: #{deploy[:application]} ***********")
 Chef::Log.info("********* Info: #{application} ***********")
+Chef::Log.info("********* Info: #{deploy} ***********")
 Chef::Log.info("********* Info: #{deploy} ***********")
 
     # SSL Config
