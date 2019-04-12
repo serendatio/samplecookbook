@@ -151,22 +151,22 @@ search("aws_opsworks_app").each do |app|
             sudo mv certbot-auto /usr/local/bin/certbot-auto
             
             # Make symlink to accept acme test
-            ln -sf #{node[:efs][:rootdir]}/letsencrypt/.well-known/ /mnt/nginx/#{deploy[:application]}/current/
+            ln -sf #{node[:efs][:rootdir]}/letsencrypt/.well-known/ /mnt/nginx/#{app['shortname']}/current/
 
             # Request ssl certifiate
-            /usr/local/bin/certbot-auto certonly --debug --agree-tos --email devops@serend.io --webroot --webroot-path /mnt/nginx/#{deploy[:application]}/current #{custom_domains} -n --cert-name #{deploy[:application]}
+            /usr/local/bin/certbot-auto certonly --debug --agree-tos --email devops@serend.io --webroot --webroot-path /mnt/nginx/#{app['shortname']}/current #{custom_domains} -n --cert-name #{app['shortname']}
             
             # Check for existing self signed certificate
-            exitsting_certificate=#{node[:custom_ssl][:dir]}/#{deploy[:application]}.crt
-            new_certificate=#{node[:efs][:rootdir]}/letsencrypt/live/#{deploy[:application]}/fullchain.pem 
+            exitsting_certificate=#{node[:custom_ssl][:dir]}/#{app['shortname']}.crt
+            new_certificate=#{node[:efs][:rootdir]}/letsencrypt/live/#{app['shortname']}/fullchain.pem 
             if [ -e "$exitsting_certificate" ] && [ -e "$new_certificate" ]; then
                 # Remove self signed certificate
-                rm -f #{node[:custom_ssl][:dir]}/#{deploy[:application]}.crt
-                rm -f #{node[:custom_ssl][:dir]}/#{deploy[:application]}.key
+                rm -f #{node[:custom_ssl][:dir]}/#{app['shortname']}.crt
+                rm -f #{node[:custom_ssl][:dir]}/#{app['shortname']}.key
 
                 # Symlink valid certifiate to the #{node[:custom_ssl][:dir]} folder
-                ln -sf #{node[:efs][:rootdir]}/letsencrypt/live/#{deploy[:application]}/fullchain.pem #{node[:custom_ssl][:dir]}/#{deploy[:application]}.crt
-                ln -sf #{node[:efs][:rootdir]}/letsencrypt/live/#{deploy[:application]}/privkey.pem #{node[:custom_ssl][:dir]}/#{deploy[:application]}.key
+                ln -sf #{node[:efs][:rootdir]}/letsencrypt/live/#{app['shortname']}/fullchain.pem #{node[:custom_ssl][:dir]}/#{app['shortname']}.crt
+                ln -sf #{node[:efs][:rootdir]}/letsencrypt/live/#{app['shortname']}/privkey.pem #{node[:custom_ssl][:dir]}/#{app['shortname']}.key
                 
             fi
 
