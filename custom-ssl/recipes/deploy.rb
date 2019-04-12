@@ -133,6 +133,50 @@ search("aws_opsworks_app").each do |app|
         EOH
     end
 
+    # Install Cert Bot
+    # Usage :  /usr/local/bin/certbot-auto certonly --debug --agree-tos --email devops@serend.io --webroot --webroot-path /mnt/nginx/app/current -d app.serend.io -n
+    # --debug is required to run certbot on aws linux
+    # Removing existing cerfitifate - TEMP
+    script 'certbot_install' do
+        interpreter 'bash'
+        not_if do
+            "'#{app['enable_ssl']}'"
+        end
+        code <<-EOH
+            # Get certbot
+            curl -O https://dl.eff.org/certbot-auto
+        
+            # Set permission and move it the bin folder
+            chmod +x certbot-auto
+            sudo mv certbot-auto /usr/local/bin/certbot-auto
+            
+            # Make symlink to accept acme test
+            ln -sf #{node[:efs][:rootdir]}/letsencrypt/.well-known/ /mnt/nginx/#{deploy[:application]}/current/
+
+            # Request ssl certifiate
+            /usr/local/bin/certbot-auto certonly --debug --agree-tos --email devops@serend.io --webroot --webroot-path /mnt/nginx/#{deploy[:application]}/current #{custom_domains} -n --cert-name #{deploy[:application]}
+            
+            # Check for existing self signed certificate
+            exitsting_certificate=#{node[:custom_ssl][:dir]}/#{deploy[:application]}.crt
+            new_certificate=#{node[:efs][:rootdir]}/letsencrypt/live/#{deploy[:application]}/fullchain.pem 
+            if [ -e "$exitsting_certificate" ] && [ -e "$new_certificate" ]; then
+                # Remove self signed certificate
+                rm -f #{node[:custom_ssl][:dir]}/#{deploy[:application]}.crt
+                rm -f #{node[:custom_ssl][:dir]}/#{deploy[:application]}.key
+
+                # Symlink valid certifiate to the #{node[:custom_ssl][:dir]} folder
+                ln -sf #{node[:efs][:rootdir]}/letsencrypt/live/#{deploy[:application]}/fullchain.pem #{node[:custom_ssl][:dir]}/#{deploy[:application]}.crt
+                ln -sf #{node[:efs][:rootdir]}/letsencrypt/live/#{deploy[:application]}/privkey.pem #{node[:custom_ssl][:dir]}/#{deploy[:application]}.key
+                
+            fi
+
+            # Restart nginx after symlink
+            service nginx restart
+        EOH
+        ignore_failure false
+        action :nothing
+    end
+
 end
 
 
