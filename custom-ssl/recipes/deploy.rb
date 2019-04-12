@@ -58,9 +58,9 @@ search("aws_opsworks_app").each do |app|
     # Create a Self-Signed Certificate (if one was NOT specified by App)
     script 'create self-signed certificate' do
         interpreter 'bash'
-        not_if do
-            deploy[:ssl_support]
-        end
+        # not_if do
+        #     deploy[:ssl_support]
+        # end
         code <<-EOH
             # Bash shell script for generating self-signed certs.
             #
