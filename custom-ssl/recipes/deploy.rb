@@ -154,7 +154,7 @@ search("aws_opsworks_app").each do |app|
             ln -sf #{node[:efs][:rootdir]}/letsencrypt/.well-known/ /mnt/nginx/#{app['shortname']}/current/
 
             # Request ssl certifiate
-            /usr/local/bin/certbot-auto certonly --debug --agree-tos --email devops@serend.io --webroot --webroot-path /mnt/nginx/#{app['shortname']}/current #{app['domains'][0]} -n --cert-name #{app['shortname']}
+            /usr/local/bin/certbot-auto certonly --debug --agree-tos --email devops@serend.io --webroot --webroot-path /mnt/nginx/#{app['shortname']}/current -d #{app['domains'][0]} -n --cert-name #{app['shortname']}
             
             # Check for existing self signed certificate
             exitsting_certificate=#{node[:custom_ssl][:dir]}/#{app['shortname']}.crt
