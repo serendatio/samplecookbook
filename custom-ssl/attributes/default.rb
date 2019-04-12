@@ -19,3 +19,7 @@
 
 # SSL Variables
 default[:custom_ssl][:dir] = '/etc/ssl'
+
+# Defaults for EFS
+default[:efs][:rootdir] = "/efs"
+
