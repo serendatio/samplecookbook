@@ -1,3 +1,4 @@
+name 'custom-ssl'
 maintainer       "Serend Software Inc"
 maintainer_email "devops@serend.io"
 license          "Apache 2.0"
