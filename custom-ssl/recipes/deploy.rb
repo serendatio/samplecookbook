@@ -139,9 +139,9 @@ search("aws_opsworks_app").each do |app|
     # Removing existing cerfitifate - TEMP
     script 'certbot_install' do
         interpreter 'bash'
-        not_if do
-            "'#{app['enable_ssl']}'"
-        end
+        # not_if do
+        #     "'#{app['enable_ssl']}'"
+        # end
         code <<-EOH
             # Get certbot
             curl -O https://dl.eff.org/certbot-auto
