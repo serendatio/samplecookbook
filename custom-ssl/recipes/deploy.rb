@@ -144,12 +144,18 @@ search("aws_opsworks_app").each do |app|
         # end
         code <<-EOH
             # Get certbot
-            curl -O https://dl.eff.org/certbot-auto
+            # curl -O https://dl.eff.org/certbot-auto
         
             # Set permission and move it the bin folder
-            chmod +x certbot-auto
-            sudo mv certbot-auto /usr/local/bin/certbot-auto
-            
+            # chmod +x certbot-auto
+            # sudo mv certbot-auto /usr/local/bin/certbot-auto
+
+            # Copy certbot from EFS folder - Modified for Amazon Linux 2
+            sudo cp /efs/certbot-auto /usr/local/bin/certbot-auto
+
+            # Set permission
+            chmod +x /usr/local/bin/certbot-auto
+
             # Make symlink to accept acme test
             ln -sf #{node[:efs][:rootdir]}/letsencrypt/.well-known/ /mnt/nginx/#{app['shortname']}/current/web/
 
