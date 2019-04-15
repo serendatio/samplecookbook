@@ -176,6 +176,14 @@ search("aws_opsworks_app").each do |app|
         ignore_failure false
     end
 
+    # Setup cron job for certificate renewal
+    cron "certbot_renewal" do
+        hour "8"
+        minute "0"
+        command "/usr/local/bin/certbot-auto renew"
+        mailto "devops@serend.io"
+    end
+
 end
 
 
