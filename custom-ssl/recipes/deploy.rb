@@ -151,10 +151,10 @@ search("aws_opsworks_app").each do |app|
             sudo mv certbot-auto /usr/local/bin/certbot-auto
             
             # Make symlink to accept acme test
-            ln -sf #{node[:efs][:rootdir]}/letsencrypt/.well-known/ /mnt/nginx/#{app['shortname']}/current/
+            ln -sf #{node[:efs][:rootdir]}/letsencrypt/.well-known/ /mnt/nginx/#{app['shortname']}/current/web/
 
             # Request ssl certifiate
-            /usr/local/bin/certbot-auto certonly --debug --agree-tos --email devops@serend.io --webroot --webroot-path /mnt/nginx/#{app['shortname']}/current -d #{app['domains'][0]} -n --cert-name #{app['shortname']}
+            /usr/local/bin/certbot-auto certonly --debug --agree-tos --email devops@serend.io --webroot --webroot-path /mnt/nginx/#{app['shortname']}/current/web/ -d #{app['domains'][0]} -n --cert-name #{app['shortname']}
             
             # Check for existing self signed certificate
             exitsting_certificate=#{node[:custom_ssl][:dir]}/#{app['shortname']}.crt
