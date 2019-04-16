@@ -1,25 +1,21 @@
 #
 # Cookbook:: deploy
-# Recipe:: default
+# Recipe:: setup
 #
 # Copyright:: 2019, The Authors, All Rights Reserved.
 
 include_recipe 'aws'
 
-Chef::Log.info("********* Running deploy::default ***********")
-
-app = search("aws_opsworks_app","deploy:true").first
+Chef::Log.info("********* Running deploy::setup ***********")
 
 search("aws_opsworks_app").each do |app|
-  Chef::Log.info("********** The app's short name is '#{app['shortname']}' **********")
-  Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' **********")
-  Chef::Log.info("********** The app's URL is '#{app['data_sources']}' **********")
-  Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['database_name']}' **********")
-  Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['type']}' **********")
-  Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['arn']}' **********")
-end
 
-search("aws_opsworks_app").each do |app|
+	Chef::Log.info("********** The app's short name is '#{app['shortname']}' **********")
+	Chef::Log.info("********** The app's URL is '#{app['app_source']['url']}' **********")
+	Chef::Log.info("********** The app's URL is '#{app['data_sources']}' **********")
+	Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['database_name']}' **********")
+	Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['type']}' **********")
+	Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['arn']}' **********")
 
 	# Transfer source file from S3
 	aws_s3_file "/tmp/#{app['shortname']}-#{node['env']}.zip" do
