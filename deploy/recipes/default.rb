@@ -23,11 +23,7 @@ search("aws_opsworks_app").each do |app|
   Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['arn']}' **********")
 end
 
-node[:deploy].each do |application, deploy|
-
-	Chef::Log.info("********** Deploy Test '#{node[:deploy]}' **********")
-	Chef::Log.info("********** Deploy Test '#{application}' **********")
-	Chef::Log.info("********** Deploy Test '#{deploy}' **********")
+search("aws_opsworks_app").each do |app|
 
 	# Transfer source file from S3
 	aws_s3_file "/tmp/#{app['shortname']}-#{node['env']}.zip" do
