@@ -23,11 +23,10 @@ search("aws_opsworks_app").each do |app|
   Chef::Log.info("********** The app's URL is '#{app['data_sources'][0]['arn']}' **********")
 end
 
-Chef::Log.info("********** The RDS instance's address is '#{rds_db_instance['address']}' **********")
-Chef::Log.info("********** The RDS instance's database engine type is '#{rds_db_instance['engine']}' **********")
-
-
 node[:deploy].each do |application, deploy|
+
+	Chef::Log.info("********** Deploy Test '#{application}' **********")
+	Chef::Log.info("********** Deploy Test '#{deploy}' **********")
 
 	# Transfer source file from S3
 	aws_s3_file "/tmp/#{app['shortname']}-#{node['env']}.zip" do
