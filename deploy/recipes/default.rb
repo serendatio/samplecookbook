@@ -25,6 +25,7 @@ end
 
 node[:deploy].each do |application, deploy|
 
+	Chef::Log.info("********** Deploy Test '#{node[:deploy]}' **********")
 	Chef::Log.info("********** Deploy Test '#{application}' **********")
 	Chef::Log.info("********** Deploy Test '#{deploy}' **********")
 
