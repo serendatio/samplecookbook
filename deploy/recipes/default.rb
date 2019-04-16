@@ -9,9 +9,7 @@ include_recipe 'aws'
 Chef::Log.info("********* Running deploy::default ***********")
 
 app = search("aws_opsworks_app", "deploy:true").first
-rds_db_instance = search("aws_opsworks_rds_db_instance", "deploy:true").first
-
-Chef::Log.info("********* #{rds_db_instance} ***********")
+rds_db_instance = search("aws_opsworks_rds_db_instance").first
 
 # Transfer source file from S3
 aws_s3_file "/tmp/#{app['shortname']}-#{node['env']}.zip" do

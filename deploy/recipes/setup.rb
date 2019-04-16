@@ -8,6 +8,8 @@ include_recipe 'aws'
 
 Chef::Log.info("********* Running deploy::setup ***********")
 
+rds_db_instance = search("aws_opsworks_rds_db_instance").first
+
 search("aws_opsworks_app").each do |app|
 
 	Chef::Log.info("********** The app's short name is '#{app['shortname']}' **********")
