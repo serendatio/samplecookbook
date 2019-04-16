@@ -169,7 +169,7 @@ search("aws_opsworks_app").each do |app|
             # Restart nginx after symlink
             service nginx restart
         EOH
-        ignore_failure false
+        ignore_failure true
     end
 
     # Setup cron job for certificate renewal
