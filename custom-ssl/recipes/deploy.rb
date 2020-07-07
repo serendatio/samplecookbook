@@ -167,7 +167,7 @@ search("aws_opsworks_app").each do |app|
             fi
 
             # Restart nginx after symlink
-            service nginx restart
+            sudo systemctl reload nginx
         EOH
         ignore_failure true
     end
